@@ -32,12 +32,19 @@ module.exports = class CarController {
    */
   async index(req, res) {
     const carsLength = await this.carService.getCarsLength();
-    const lastAddedCar = await this.carService.getLastCar();
-    res.render(`${this.CAR_VIEWS}/index.njk`, {
-      title: 'Rent a Car',
-      carsLength,
-      lastAddedCar,
-    });
+    let lastAddedCar;
+    try{
+      lastAddedCar = await this.carService.getLastCar();
+    }catch(e){
+      lastAddedCar = null;
+    }finally{
+      res.render(`${this.CAR_VIEWS}/index.njk`, {
+        title: 'Rent a Car',
+        carsLength,
+        lastAddedCar,
+      });
+
+    }
   }
 
   /**

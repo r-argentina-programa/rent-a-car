@@ -92,7 +92,7 @@ module.exports = class reservationController {
     res.render(`${this.RESERVATION_VIEWS}/add.njk`, {
       title: 'Add New Reservation',
       cars,
-      users,
+      users
     });
   }
 

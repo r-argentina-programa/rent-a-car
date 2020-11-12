@@ -103,7 +103,7 @@ module.exports = class reservationController {
   async save(req, res) {
     const reservation = fromFormToEntity(req.body);
     const { car } = await this.carService.getById(reservation.carId);
-    await this.reservationService.save(reservation, car);
+    await this.reservationService.makeReservation(reservation, car);
     res.redirect(`${this.ROUTE_BASE}/manage`);
   }
 

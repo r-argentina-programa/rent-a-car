@@ -13,11 +13,10 @@ module.exports = class ReservationService {
   }
 
   /**
-   * @param {import('../entity/Reservation')} reservation
-   * @param {import('../../car/entity/Car')} car
-   * @param {boolean} isFinished
+   * @param {Reservation} reservation
+   * @param {Car} car
    */
-  async save(reservation, car) {
+  async makeReservation(reservation, car) {
     if (!(reservation instanceof Reservation)) {
       throw new ReservationNotDefinedError();
     }
@@ -25,8 +24,7 @@ module.exports = class ReservationService {
       throw new CarNotDefinedError();
     }
 
-    reservation.fillReservationPrice(car, reservation.pricePerDay);
-    reservation.fillReservationStatus();
+    reservation.reserve(car);
     return this.reservationRepository.save(reservation);
   }
 
@@ -38,7 +36,7 @@ module.exports = class ReservationService {
       throw new ReservationNotDefinedError();
     }
 
-    reservation.fillReservationStatus(true);
+    reservation.finish();
     return this.reservationRepository.save(reservation);
   }
 
@@ -50,7 +48,7 @@ module.exports = class ReservationService {
       throw new ReservationNotDefinedError();
     }
 
-    reservation.fillReservationStatus(false);
+    reservation.unblock();
     return this.reservationRepository.save(reservation);
   }
 
@@ -62,8 +60,7 @@ module.exports = class ReservationService {
       throw new ReservationNotDefinedError();
     }
 
-    reservation.payReservation();
-    reservation.fillReservationStatus(false);
+    reservation.pay();
     return this.reservationRepository.save(reservation);
   }
 

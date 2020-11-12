@@ -1,4 +1,10 @@
 module.exports = class Reservation {
+  STATUS = {
+    PENDING: 0,
+    CONFIRMED: 1,
+    FINISHED: 2,
+  };
+
   /**
    * @param {number} id
    * @param {string} startDate
@@ -57,36 +63,33 @@ module.exports = class Reservation {
 
   calculateReservationLength() {
     const MILISECONDS_IN_A_DAY = 86400000;
-    return Math.ceil(
-      (new Date(this.finishDate).getTime() - new Date(this.startDate).getTime()) /
-        MILISECONDS_IN_A_DAY
-    );
+    const finishDate = new Date(this.finishDate).getTime();
+    const startDate = new Date(this.startDate).getTime();
+    return Math.ceil((finishDate - startDate) / MILISECONDS_IN_A_DAY);
   }
 
   /**
    * @param {import('../../car/entity/Car')} car
-   * @param {number} pricePerDay
    */
-  fillReservationPrice(car, pricePerDay) {
-    this.pricePerDay = pricePerDay || car.price;
+  reserve(car) {
+    this.pricePerDay = this.pricePerDay || car.price;
     this.totalPrice = this.pricePerDay * this.calculateReservationLength();
+    this.status = this.paid ? this.STATUS.CONFIRMED : this.STATUS.PENDING;
+    return this;
   }
 
-  /**
-   * @param {boolean} isFinished
-   */
-  fillReservationStatus(isFinished) {
-    if (isFinished) {
-      this.status = 'Finished';
-      return;
-    }
-    this.status = this.paid ? 'Confirmed' : 'Pending';
-  }
-
-  /**
-   * @param {boolean} isFinished
-   */
-  payReservation() {
+  pay() {
     this.paid = true;
+    this.status = this.STATUS.CONFIRMED;
+    return this;
+  }
+
+  finish() {
+    this.status = this.STATUS.FINISHED;
+    return this;
+  }
+
+  unblock(){
+    this.status = this.STATUS.PENDING;
   }
 };

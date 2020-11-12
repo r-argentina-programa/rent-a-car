@@ -15,11 +15,10 @@ const {
 } = require('../module/reservation/module');
 
 function configureSequelizeDatabase() {
-  const sequelize = new Sequelize({
+  return new Sequelize({
     dialect: 'sqlite',
     storage: process.env.DB_PATH,
   });
-  return sequelize;
 }
 
 /**
@@ -109,6 +108,9 @@ function addReservationModuleDefinitions(container) {
   });
 }
 
+/**
+ * @returns {DIContainer}
+ */
 module.exports = function configureDI() {
   const container = new DIContainer();
   addCommonDefinitions(container);

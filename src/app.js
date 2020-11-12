@@ -26,9 +26,9 @@ initUserModule(app, container);
 initReservationModule(app, container);
 
 /**
- * @type {import('./module/car/controller/carController')} carController
+ * @type {import('./module/default/controller/defaultController')} defaultController
  */
-const carController = container.get('CarController');
-app.get('/', carController.index.bind(carController));
+const defaultController = container.get('DefaultController');
+app.get('/', defaultController.index.bind(defaultController));
 
 app.listen(port, () => console.log(`Server listening at http://localhost:${port}`));

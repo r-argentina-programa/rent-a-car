@@ -5,6 +5,7 @@ const { default: DIContainer, object, get, factory } = require('rsdi');
 const { Sequelize } = require('sequelize');
 const multer = require('multer');
 
+const { DefaultController } = require('../module/default/module');
 const { CarController, CarService, CarRepository, CarModel } = require('../module/car/module');
 const { UserController, UserService, UserRepository, UserModel } = require('../module/user/module');
 const {
@@ -65,6 +66,7 @@ function addCommonDefinitions(container) {
   container.addDefinitions({
     Sequelize: factory(configureSequelizeDatabase),
     Multer: factory(configureMulter),
+    DefaultController: object(DefaultController).construct(),
   });
 }
 

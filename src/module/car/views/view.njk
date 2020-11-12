@@ -23,19 +23,19 @@
                   <td>{{ car.id }}</td>
                 </tr>
                 <tr>
-                  <th>Brand</th>
+                  <th>Marca</th>
                   <td>{{ car.brand }}</td>
                 </tr>
                 <tr>
-                  <th>Model</th>
+                  <th>Modelo</th>
                   <td>{{ car.model }}</td>
                 </tr>
                 <tr>
-                  <th>Year</th>
+                  <th>Año</th>
                   <td>{{ car.year }}</td>
                 </tr>
                 <tr>
-                  <th>Kilometer Count</th>
+                  <th>Kilometraje</th>
                   <td>{{ car.kms }} kms</td>
                 </tr>
                 <tr>
@@ -43,40 +43,40 @@
                   <td>{{ car.color }}</td>
                 </tr>
                 <tr>
-                  <th>Air Conditioner</th>
+                  <th>Aire acondicionado (si/no)</th>
                   <td>{{ car.ac }}</td>
                 </tr>
                 <tr>
-                  <th>Max passengers</th>
+                  <th>Max pasajeros</th>
                   <td>{{ car.passengers }}</td>
                 </tr>
                 <tr>
-                  <th>Transmission</th>
+                  <th>Transmisión</th>
                   <td>{{ car.transmission }}</td>
                 </tr>
                 <tr>
-                  <th>Price</th>
+                  <th>Precio diario</th>
                   <td>$ {{ car.price }}</td>
                 </tr>
                 <tr>
-                  <th>Created</th>
+                  <th>Creado</th>
                   <td>{{ car.createdAt }}</td>
                 </tr>
                 <tr>
-                  <th>Updated</th>
+                  <th>Modificado</th>
                   <td>{{ car.updatedAt }}</td>
                 </tr>
               </tbody>
             </table>
             <div class="buttons">
               <a class="button is-link is-outlined" href="{{ '/car/edit/' + car.id }}">
-                <span>Edit</span>
+                <span>Editar</span>
                 <span class="icon is-small">
                   <i class="fas fa-edit"></i>
                 </span>
               </a>
               <button class="button is-danger is-outlined delete-button">
-                <span>Delete</span>
+                <span>Borrar</span>
                 <span class="icon is-small">
                   <i class="fas fa-times"></i>
                 </span>

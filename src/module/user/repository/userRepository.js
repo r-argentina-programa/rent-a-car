@@ -32,8 +32,7 @@ module.exports = class UserRepository {
 
   async getAll() {
     const userInstances = await this.userModel.findAll();
-    const users = userInstances.map((userInstance) => fromModelToEntity(userInstance));
-    return users;
+    return userInstances.map((userInstance) => fromModelToEntity(userInstance));
   }
 
   /**

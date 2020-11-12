@@ -1,17 +1,18 @@
 <div class="tile is-parent">
   <article class="tile is-child notification is-info is-light">
     <div class="content">
-      <p class="title">Last Reservations</p>
+      <p class="title">Últimas reservas</p>
       <div class="content">
         {% if reservations.length > 0 %}
           <table class="table align-middle">
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Start Date</th>
-                <th>Finish Date</th>
-                <th>Price Per Day</th>
-                <th>Status</th>
+                <th>Fecha inicio</th>
+                <th>Fecha fin</th>
+                <th>Precio por día</th>
+                <th>Total</th>
+                <th>Estado</th>
               </tr>
             </thead>
             <tbody>
@@ -23,15 +24,15 @@
                   <td>{{ reservation.formattedDates.startDate }}</td>
                   <td>{{ reservation.formattedDates.finishDate }}</td>
                   <td>{{ reservation.pricePerDay }}</td>
+                  <td>{{ reservation.total }}</td>
                   <td>{{ reservation.status }}</td>
                 </tr>
               {% endfor %}
             {% else %}
-              <p class="subtitle">There are no reservations for this car</p>
+              <p class="subtitle">No hay reservas para este auto</p>
             {% endif %}
           </tbody>
         </table>
-
       </div>
     </div>
   </article>

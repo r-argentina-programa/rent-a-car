@@ -15,11 +15,11 @@ class ReservationModel extends Model {
           unique: true,
         },
         startDate: {
-          type: DataTypes.STRING,
+          type: DataTypes.DATE,
           allowNull: false,
         },
         finishDate: {
-          type: DataTypes.STRING,
+          type: DataTypes.DATE,
           allowNull: false,
         },
         pricePerDay: {

@@ -1,17 +1,18 @@
 <div class="tile is-parent">
   <article class="tile is-child notification is-info is-light">
     <div class="content">
-      <p class="title">Last Reservations</p>
+      <p class="title">Últimas reservas</p>
       <div class="content">
         {% if reservations.length > 0 %}
           <table class="table align-middle">
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Start Date</th>
-                <th>Finish Date</th>
-                <th>Price Per Day</th>
-                <th>Status</th>
+                <th>Fecha inicio</th>
+                <th>Fecha fin</th>
+                <th>Precio por día</th>
+                <th>Precio total</th>
+                <th>Estado</th>
               </tr>
             </thead>
             <tbody>
@@ -27,11 +28,10 @@
                 </tr>
               {% endfor %}
             {% else %}
-              <p class="subtitle">There are no reservations for this user</p>
+              <p class="subtitle">No hay reservas para este usuario</p>
             {% endif %}
           </tbody>
         </table>
-
       </div>
     </div>
   </article>

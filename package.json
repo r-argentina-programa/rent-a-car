@@ -2,11 +2,12 @@
   "name": "rent-a-car",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
     "schema:sync": "node src/cli/init.db.js",
-    "dev": "npm run schema:sync && nodemon src/app.js --ext js,njk,html ",
+    "dev": "npm run schema:sync && nodemon --watch ./src/ -e 'js,njk,html' --verbose ./src/app.js",
+    "dev:legacy": "npm run schema:sync && nodemon --watch ./src/ -L -e 'js,njk,html' --verbose ./src/app.js",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },

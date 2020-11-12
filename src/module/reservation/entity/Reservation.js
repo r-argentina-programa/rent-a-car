@@ -85,11 +85,15 @@ module.exports = class Reservation {
   }
 
   finish() {
+    if (this.paid !== true) {
+      throw new Error("La reserva no puede finalizarse porque no está paga.")
+    }
+
     this.status = this.STATUS.FINISHED;
     return this;
   }
 
-  unblock(){
+  unblock() {
     this.status = this.STATUS.PENDING;
   }
 };

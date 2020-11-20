@@ -34,10 +34,6 @@ class ReservationModel extends Model {
           type: DataTypes.STRING,
           allowNull: false,
         },
-        paid: {
-          type: DataTypes.BOOLEAN,
-          allowNull: false,
-        },
         status: {
           type: DataTypes.STRING,
           allowNull: false,
@@ -46,6 +42,9 @@ class ReservationModel extends Model {
       {
         sequelize: sequelizeInstance,
         modelName: 'Reservation',
+        tableName: 'reservations',
+        underscored: true,
+        paranoid: true
       }
     );
 
@@ -61,6 +60,8 @@ class ReservationModel extends Model {
     ReservationModel.belongsTo(CarModel, { foreignKey: 'carId', constraints: false });
     UserModel.hasMany(ReservationModel, { foreignKey: 'userId', constraints: false });
     ReservationModel.belongsTo(UserModel, { foreignKey: 'userId', constraints: false });
+    
+    return ReservationModel;
   }
 }
 

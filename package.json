@@ -5,9 +5,9 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "schema:sync": "node src/cli/init.db.js",
-    "dev": "npm run schema:sync && nodemon --watch ./src/ -e 'js,njk,html' --verbose ./src/app.js",
-    "dev:legacy": "npm run schema:sync && nodemon --watch ./src/ -L -e 'js,njk,html' --verbose ./src/app.js",
+    "schema:migrate": "npx sequelize-cli db:migrate",
+    "dev": "nodemon --inspect --watch ./src/ -e 'js,njk,html' --verbose ./src/app.js",
+    "dev:legacy": "nodemon --inspect --watch ./src/ -L -e 'js,njk,html' --verbose ./src/app.js",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },

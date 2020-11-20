@@ -49,11 +49,14 @@ class UserModel extends Model {
         birthdate: {
           type: DataTypes.STRING,
           allowNull: false,
-        },
+        }
       },
       {
         sequelize: sequelizeInstance,
         modelName: 'User',
+        tableName: 'users',
+        underscored: true,
+        paranoid: true
       }
     );
 

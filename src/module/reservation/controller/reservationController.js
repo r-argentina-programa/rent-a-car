@@ -1,4 +1,5 @@
 const { fromFormToEntity } = require('../mapper/reservationMapper');
+const ReservationError = require('../error/ReservationError');
 const ReservationIdNotDefinedError = require('../error/ReservationIdNotDefinedError');
 
 module.exports = class reservationController {
@@ -86,14 +87,27 @@ module.exports = class reservationController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  async add(req, res) {
-    const cars = await this.carService.getAll();
-    const users = await this.userService.getAll();
-    res.render(`${this.RESERVATION_VIEWS}/add.njk`, {
-      title: 'Add New Reservation',
-      cars,
-      users,
-    });
+  async add(req, res, next) {
+    try {
+      const cars = await this.carService.getAll();
+      const users = await this.userService.getAll();
+
+      if (!cars.length) {
+        throw new ReservationError("No hay autos creados, no se puede crear una reserva.");
+      }
+
+      if (!users.length) {
+        throw new ReservationError("No hay usurios creados, no se puede crear una reserva.");
+      }
+
+      res.render(`${this.RESERVATION_VIEWS}/add.njk`, {
+        title: 'Add New Reservation',
+        cars,
+        users,
+      });
+    } catch (e) {
+      next(e);
+    }
   }
 
   /**

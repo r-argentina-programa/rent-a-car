@@ -9,7 +9,7 @@ const { initUserModule } = require('./module/user/module');
 const { initReservationModule } = require('./module/reservation/module');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
@@ -29,6 +29,14 @@ initReservationModule(app, container);
  * @type {import('./module/default/controller/defaultController')} defaultController
  */
 const defaultController = container.get('DefaultController');
-app.get('/', defaultController.index.bind(defaultController));
+defaultController.configureRoutes(app);
+
+app.use(function (err, req, res, next) {
+  res.status(500);
+  res.render(`default/views/error.njk`, {
+    title: 'Error',
+    error: err
+  });
+})
 
 app.listen(port, () => console.log(`Server listening at http://localhost:${port}`));

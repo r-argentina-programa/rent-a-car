@@ -10,16 +10,17 @@
   <td>{{ reservation.carId }}</td>
   <td>{{ reservation.userId }}</td>
   <td>
-    {% if reservation.status === "Pending" %}
+    {% if reservation.status == 0 %}
       {% include "reservation/views/layouts/status-pending-buttons.njk" %}
     {% endif %}
 
-    {% if reservation.status === "Finished" %}
+    {% if reservation.status == 1 %}
+      {% include "reservation/views/layouts/status-confirmed-buttons.njk" %}
+    {% endif %}
+
+    {% if reservation.status == 2 %}
       {% include "reservation/views/layouts/status-finished-buttons.njk" %}
     {% endif %}
 
-    {% if reservation.status === "Confirmed" %}
-      {% include "reservation/views/layouts/status-confirmed-buttons.njk" %}
-    {% endif %}
   </td>
 </tr>

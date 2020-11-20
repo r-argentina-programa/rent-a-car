@@ -1,3 +1,4 @@
+const reservationStatus = require('../../reservation/entity/ReservationStatus');
 module.exports = class DefaultController {
   constructor() {
     this.ROUTE_BASE = '/';
@@ -10,6 +11,7 @@ module.exports = class DefaultController {
   configureRoutes(app) {
     const ROUTE = this.ROUTE_BASE;
     app.get(`${ROUTE}`, this.index.bind(this));
+    app.get(`${ROUTE}js/reservation-status.js`, this.reservationStatus.bind(this));
   }
 
   /**
@@ -20,5 +22,9 @@ module.exports = class DefaultController {
     res.render(`${this.VIEWS_DIR}/index.njk`, {
       title: 'Rent a Car',
     });
+  }
+
+  async reservationStatus(req, res){
+    res.send(`window.ReservationStatus = ${JSON.stringify(reservationStatus)}`);
   }
 };

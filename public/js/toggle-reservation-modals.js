@@ -19,21 +19,21 @@ function fillModal(evt) {
   const reservation = evt.target.closest('.reservation-data');
   const { id, status } = reservation.dataset;
 
-  if (status === 'Confirmed') {
-    $modalTitle.textContent = 'Finish Reservation';
-    $statusButton.textContent = 'Finish';
-    $modalContent.textContent = `Are you sure you want to mark Reservation with ID ${id} as Finished ?`;
-    $modalForm.action = `/reservation/finish/${id}`;
-  } else if (status === 'Finished') {
-    $modalTitle.textContent = 'Unblock Reservation';
-    $statusButton.textContent = 'Unblock';
-    $modalContent.textContent = `Are you sure you want to unblock finished Reservation with ID ${id} ?`;
-    $modalForm.action = `/reservation/unblock/${id}`;
-  } else if (status === 'Pending') {
-    $modalTitle.textContent = 'Pay Reservation';
-    $statusButton.textContent = 'Pay';
-    $modalContent.textContent = `Are you sure you want to mark Reservation with ID ${id} as Paid ?`;
+  if (status === ReservationStatus.PENDING.value) {
+    $modalTitle.textContent = 'Marcar reserva como paga';
+    $statusButton.textContent = 'Marcar como paga';
+    $modalContent.textContent = `Confirma marcar reserva ID ${id} como Paga?`;
     $modalForm.action = `/reservation/pay/${id}`;
+  } else if (status == ReservationStatus.PAID.value) {
+    $modalTitle.textContent = 'Finalizar reserva';
+    $statusButton.textContent = 'Finalizar';
+    $modalContent.textContent = `Confirma marcar reserva ID ${id} como Finalizada?`;
+    $modalForm.action = `/reservation/finish/${id}`;
+  } else if (status == ReservationStatus.FINISHED.value) {
+    $modalTitle.textContent = 'Desbloquear reserva';
+    $statusButton.textContent = 'Desbloquear';
+    $modalContent.textContent = `Confirma marcar la reserva ID ${id} como Desbloqueada?`;
+    $modalForm.action = `/reservation/unblock/${id}`;
   }
 }
 

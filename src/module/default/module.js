@@ -3,7 +3,7 @@ const DefaultController = require('./controller/defaultController');
  * @param {import('express').Application} app
  * @param {import('rsdi').IDIContainer} container
  */
-function initCarModule(app, container) {
+function initDefaultModule(app, container) {
   /**
    * @type {DefaultController} controller
    */
@@ -11,4 +11,4 @@ function initCarModule(app, container) {
   controller.configureRoutes(app);
 }
 
-module.exports = { DefaultController, initCarModule };
+module.exports = { DefaultController, initDefaultModule };

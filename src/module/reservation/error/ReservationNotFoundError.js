@@ -1,1 +1,2 @@
-module.exports = class ReservationNotFoundError extends Error {};
+const ReservationError = require('./ReservationError');
+module.exports = class ReservationNotFoundError extends ReservationError {};

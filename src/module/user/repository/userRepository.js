@@ -1,6 +1,6 @@
 const { fromModelToEntity } = require('../mapper/userMapper');
 const {
-  fromModelToEntity: fromReservationModelToEntity,
+  fromModelToEntity: fromReservationModelToEntity
 } = require('../../reservation/mapper/reservationMapper');
 const UserNotDefinedError = require('../error/UserNotDefinedError');
 const UserIdNotDefinedError = require('../error/UserIdNotDefinedError');
@@ -20,9 +20,10 @@ module.exports = class UserRepository {
    * @param {import('../entity/User')} user
    */
   async save(user) {
-    if (!(user instanceof User)) {
+    if (!user instanceof User) {
       throw new UserNotDefinedError();
     }
+
     const userInstance = this.userModel.build(user, {
       isNewRecord: !user.id,
     });

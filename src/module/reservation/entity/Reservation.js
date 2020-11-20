@@ -1,7 +1,7 @@
 module.exports = class Reservation {
   STATUS = {
     PENDING: 0,
-    CONFIRMED: 1,
+    PAID: 1,
     FINISHED: 2,
   };
 
@@ -74,13 +74,13 @@ module.exports = class Reservation {
   reserve(car) {
     this.pricePerDay = this.pricePerDay || car.price;
     this.totalPrice = this.pricePerDay * this.calculateReservationLength();
-    this.status = this.paid ? this.STATUS.CONFIRMED : this.STATUS.PENDING;
+    this.status = this.paid ? this.STATUS.PAID : this.STATUS.PENDING;
     return this;
   }
 
   pay() {
     this.paid = true;
-    this.status = this.STATUS.CONFIRMED;
+    this.status = this.STATUS.PAID;
     return this;
   }
 

@@ -80,13 +80,11 @@
 
         <div class="field">
             <div class="control">
-                <label class="label">{{ "Paid" if reservation else "Pay On Reservation" }}</label>
-                <label class="radio"><input required type="radio" name="paid" value="true"
-                            {{ 'checked' if reservation.paid === true }}>
+                <label class="label">{{ "Pagó" if reservation else "Paga al momento del alquiler" }}</label>
+                <label class="radio"><input required type="radio" name="paid" value="true" {{ 'checked' if reservation.paid === true }}>
                     Si
                 </label>
-                <label class="radio"><input required type="radio" name="paid" value=""
-                            {{ 'checked' if reservation.paid === false }}>
+                <label class="radio"><input required type="radio" name="paid" value=""{{ 'checked' if reservation.paid === false }}>
                     No
                 </label>
             </div>

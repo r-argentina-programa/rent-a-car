@@ -1,3 +1,4 @@
+const { fromModelToEntity: fromReservationModelToEntity } = require('../../reservation/mapper/reservationMapper');
 const User = require('../entity/User');
 
 exports.fromModelToEntity = ({
@@ -13,6 +14,7 @@ exports.fromModelToEntity = ({
   birthdate,
   createdAt,
   updatedAt,
+  Reservations = []
 }) =>
   new User(
     Number(id),
@@ -26,7 +28,8 @@ exports.fromModelToEntity = ({
     email,
     birthdate,
     createdAt,
-    updatedAt
+    updatedAt,
+    Reservations.map(fromReservationModelToEntity)
   );
 
 exports.fromFormToEntity = ({

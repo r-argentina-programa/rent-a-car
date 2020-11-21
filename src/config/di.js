@@ -66,7 +66,7 @@ function addCommonDefinitions(container) {
   container.addDefinitions({
     Sequelize: factory(configureSequelizeDatabase),
     Multer: factory(configureMulter),
-    DefaultController: object(DefaultController).construct(),
+    DefaultController: object(DefaultController).construct(get('ReservationService')),
   });
 }
 

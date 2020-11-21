@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { fromModelToEntity } = require('../mapper/reservationMapper');
 const { fromModelToEntity: fromCarModelToEntity } = require('../../car/mapper/carMapper');
 const { fromModelToEntity: fromUserModelToEntity } = require('../../user/mapper/userMapper');
@@ -62,5 +63,15 @@ module.exports = class ReservationRepository {
     }
     const user = fromUserModelToEntity(reservationInstance.User);
     return { reservation, car, user };
+    const reservationInstances = await this.reservationModel.findAll({
+      include: [CarModel, UserModel],
+      where: {
+        status: {
+          [Op.or]: statuses
+        }
+      }
+    });
+
+    return reservationInstances.map((reservationInstance) => fromModelToEntity(reservationInstance, fromCarModelToEntity, fromUserModelToEntity));
   }
 };

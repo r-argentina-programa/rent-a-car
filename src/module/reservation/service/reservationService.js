@@ -69,7 +69,15 @@ module.exports = class ReservationService {
   }
 
   /**
-   * @param {number} reservationId
+   * 
+   * @param  {...import('../entity/ReservationStatus').ReservationStatus} statuses 
+   */
+  async getByStatus(...statuses){
+    return this.reservationRepository.getByStatus(statuses.map(r => r.value));
+  }
+
+  /**
+   * @param {Number} reservationId
    */
   async getById(reservationId) {
     if (!Number(reservationId)) {

@@ -1,7 +1,4 @@
 const { fromModelToEntity } = require('../mapper/userMapper');
-const {
-  fromModelToEntity: fromReservationModelToEntity
-} = require('../../reservation/mapper/reservationMapper');
 const UserNotDefinedError = require('../error/UserNotDefinedError');
 const UserIdNotDefinedError = require('../error/UserIdNotDefinedError');
 const UserNotFoundError = require('../error/UserNotFoundError');
@@ -33,7 +30,7 @@ module.exports = class UserRepository {
 
   async getAll() {
     const userInstances = await this.userModel.findAll();
-    return userInstances.map((userInstance) => fromModelToEntity(userInstance));
+    return userInstances.map(fromModelToEntity);
   }
 
   /**
@@ -48,14 +45,6 @@ module.exports = class UserRepository {
       throw new UserNotFoundError(`There is no existing user with ID ${userId}`);
     }
 
-    const user = fromModelToEntity(userInstance);
-    /**
-     * @type {import('../../reservation/entity/Reservation')[]} reservations
-     */
-    const reservations = userInstance.Reservations.map((instance) =>
-      fromReservationModelToEntity(instance)
-    );
-
-    return { user, reservations };
+    return fromModelToEntity(userInstance);
   }
 };

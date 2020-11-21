@@ -12,6 +12,7 @@ module.exports = class User {
    * @param {string} birthdate
    * @param {string} createdAt
    * @param {string} updatedAt
+   * @param {import('../../reservation/entity/Reservation')[]} reservations
    */
   constructor(
     id,
@@ -25,7 +26,8 @@ module.exports = class User {
     email,
     birthdate,
     createdAt,
-    updatedAt
+    updatedAt,
+    reservations
   ) {
     this.id = id;
     this.firstName = firstName;
@@ -40,6 +42,7 @@ module.exports = class User {
     this.formattedBirthdate = this.formatBirthdate();
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.reservations = reservations;
   }
 
   formatBirthdate() {
@@ -49,5 +52,9 @@ module.exports = class User {
       day: 'numeric',
       timeZone: 'UTC',
     });
+  }
+
+  get fullName(){
+    return `${this.firstName} ${this.lastName}`;
   }
 };

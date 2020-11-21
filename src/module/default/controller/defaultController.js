@@ -1,8 +1,15 @@
-const reservationStatus = require('../../reservation/entity/ReservationStatus');
+const reservationStatuses = require('../../reservation/entity/ReservationStatus').statuses;
 module.exports = class DefaultController {
-  constructor() {
+
+  /**
+   * 
+   * @param {import('../../reservation/service/reservationService')} reservationService
+   */
+  constructor(reservationService) {
     this.ROUTE_BASE = '/';
     this.VIEWS_DIR = 'default/views';
+    this.RESERVATION_VIEWS_DIR = 'reservation/views';
+    this.reservationService = reservationService;
   }
 
   /**
@@ -19,8 +26,10 @@ module.exports = class DefaultController {
    * @param {import('express').Response} res
    */
   async index(req, res) {
-    res.render(`${this.VIEWS_DIR}/index.njk`, {
-      title: 'Rent a Car',
+    const reservations = await this.reservationService.getByStatus(reservationStatuses.PAID, reservationStatuses.PENDING);
+    res.render(`${this.RESERVATION_VIEWS_DIR}/manage.njk`, {
+      title: 'Últimas Reservas - Rent a Car',
+      reservations
     });
   }
 

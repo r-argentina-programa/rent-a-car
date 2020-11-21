@@ -1,24 +1,24 @@
-<tr class="reservation-data" data-id="{{ reservation.id }}" data-status="{{ reservation.status }}">
+<tr class="reservation-data" data-id="{{ reservation.id }}" data-status="{{ reservation.status.value }}">
   <th>{{ reservation.id }}</th>
   <td>{{ reservation.formattedDates.startDate }}</td>
   <td>{{ reservation.formattedDates.finishDate }}</td>
   <td>$ {{ reservation.pricePerDay }}</td>
   <td>$ {{ reservation.totalPrice }}</td>
   <td>{{ reservation.paymentMethod }}</td>
-  <td>{{ "Yes" if reservation.paid else "No" }}</td>
-  <td>{{ reservation.status }}</td>
-  <td>{{ reservation.carId }}</td>
-  <td>{{ reservation.userId }}</td>
+  <td>{{ "Si" if reservation.paid else "No" }}</td>
+  <td>{{ reservation.status.name }}</td>
+  <td>{{ reservation.car.name }} ID: {{reservation.car.id}}</td>
+  <td>{{ reservation.user.fullName }} ({{reservation.user.email}})</td>
   <td>
-    {% if reservation.status == 0 %}
+    {% if reservation.status.value == resevationStatuses.PENDING.value %}
       {% include "reservation/views/layouts/status-pending-buttons.njk" %}
     {% endif %}
 
-    {% if reservation.status == 1 %}
+    {% if reservation.status.value == resevationStatuses.PAID.value %}
       {% include "reservation/views/layouts/status-confirmed-buttons.njk" %}
     {% endif %}
 
-    {% if reservation.status == 2 %}
+    {% if reservation.status.value == resevationStatuses.FINISHED.value %}
       {% include "reservation/views/layouts/status-finished-buttons.njk" %}
     {% endif %}
 

@@ -24,8 +24,8 @@
                   <td>{{ reservation.formattedDates.startDate }}</td>
                   <td>{{ reservation.formattedDates.finishDate }}</td>
                   <td>{{ reservation.pricePerDay }}</td>
-                  <td>{{ reservation.total }}</td>
-                  <td>{{ reservation.status }}</td>
+                  <td>{{ reservation.totalPrice }}</td>
+                  <td>{{ reservation.status.name }}</td>
                 </tr>
               {% endfor %}
             {% else %}

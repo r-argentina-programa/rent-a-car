@@ -1,4 +1,5 @@
 const { fromFormToEntity } = require('../mapper/reservationMapper');
+const { statuses: resevationStatuses, statuses } = require('../entity/ReservationStatus');
 const ReservationError = require('../error/ReservationError');
 const ReservationIdNotDefinedError = require('../error/ReservationIdNotDefinedError');
 
@@ -40,6 +41,7 @@ module.exports = class reservationController {
     res.render(`${this.RESERVATION_VIEWS}/manage.njk`, {
       title: 'Reservation List',
       reservations,
+      resevationStatuses
     });
   }
 
@@ -53,12 +55,10 @@ module.exports = class reservationController {
       throw new ReservationIdNotDefinedError();
     }
 
-    const { reservation, car, user } = await this.reservationService.getById(reservationId);
+    const reservation = await this.reservationService.getById(reservationId);
     res.render(`${this.RESERVATION_VIEWS}/view.njk`, {
       title: `Viewing Reservation #${reservation.id}`,
-      reservation,
-      car,
-      user,
+      reservation
     });
   }
 
@@ -74,7 +74,7 @@ module.exports = class reservationController {
     const cars = await this.carService.getAll();
     const users = await this.userService.getAll();
 
-    const { reservation } = await this.reservationService.getById(reservationId);
+    const reservation = await this.reservationService.getById(reservationId);
     res.render(`${this.RESERVATION_VIEWS}/edit.njk`, {
       title: `Editing Reservation #${reservation.id}`,
       reservation,
@@ -115,9 +115,14 @@ module.exports = class reservationController {
    * @param {import('express').Response} res
    */
   async save(req, res) {
-    const reservation = fromFormToEntity(req.body);
-    const { car } = await this.carService.getById(reservation.carId);
-    await this.reservationService.makeReservation(reservation, car);
+    const formData = Object.assign({}, req.body);
+    const { "car-id": carId, "user-id": userId } = formData;
+    formData.car = await this.carService.getById(carId);
+    formData.user = await this.userService.getById(userId);
+    formData.status = formData.paid ? statuses.PAID : statuses.PENDING;
+
+    const reservation = fromFormToEntity(formData);
+    await this.reservationService.makeReservation(reservation, formData.car);
     res.redirect(`${this.ROUTE_BASE}/manage`);
   }
 
@@ -131,7 +136,7 @@ module.exports = class reservationController {
       throw new ReservationIdNotDefinedError();
     }
 
-    const { reservation } = await this.reservationService.getById(reservationId);
+    const reservation = await this.reservationService.getById(reservationId);
     await this.reservationService.finish(reservation);
     res.redirect(`${this.ROUTE_BASE}/manage`);
   }
@@ -146,7 +151,7 @@ module.exports = class reservationController {
       throw new ReservationIdNotDefinedError();
     }
 
-    const { reservation } = await this.reservationService.getById(reservationId);
+    const reservation = await this.reservationService.getById(reservationId);
     await this.reservationService.unblock(reservation);
     res.redirect(`${this.ROUTE_BASE}/manage`);
   }
@@ -161,7 +166,7 @@ module.exports = class reservationController {
       throw new ReservationIdNotDefinedError();
     }
 
-    const { reservation } = await this.reservationService.getById(reservationId);
+    const reservation = await this.reservationService.getById(reservationId);
     await this.reservationService.pay(reservation);
     res.redirect(`${this.ROUTE_BASE}/manage`);
   }

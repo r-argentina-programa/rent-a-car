@@ -1,10 +1,6 @@
-module.exports = class Reservation {
-  STATUS = {
-    PENDING: 0,
-    PAID: 1,
-    FINISHED: 2,
-  };
+const { statuses } = require('./ReservationStatus');
 
+module.exports = class Reservation {
   /**
    * @param {number} id
    * @param {string} startDate
@@ -12,12 +8,13 @@ module.exports = class Reservation {
    * @param {number} pricePerDay
    * @param {number} totalPrice
    * @param {string} paymentMethod
-   * @param {boolean} paid
-   * @param {string} status
+   * @param {import('./ReservationStatus').ReservationStatus} status
    * @param {number} carId
    * @param {number} userId
    * @param {string} createdAt
    * @param {string} updatedAt
+   * @param {import('../../car/entity/Car')} car
+   * @param {import('../../user/entity/User')} user
    */
   constructor(
     id,
@@ -26,26 +23,28 @@ module.exports = class Reservation {
     pricePerDay,
     totalPrice,
     paymentMethod,
-    paid,
     status,
     carId,
     userId,
     createdAt,
-    updatedAt
+    updatedAt,
+    car,
+    user
   ) {
     this.id = id;
-    this.startDate = startDate;
-    this.finishDate = finishDate;
+    this.startDate = new Date(startDate);
+    this.finishDate = new Date(finishDate);
     this.formattedDates = this.formatDate();
     this.pricePerDay = pricePerDay;
     this.totalPrice = totalPrice;
     this.paymentMethod = paymentMethod;
-    this.paid = paid;
     this.status = status;
     this.carId = carId;
     this.userId = userId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.car = car;
+    this.user = user;
   }
 
   formatDate() {
@@ -74,13 +73,11 @@ module.exports = class Reservation {
   reserve(car) {
     this.pricePerDay = this.pricePerDay || car.price;
     this.totalPrice = this.pricePerDay * this.calculateReservationLength();
-    this.status = this.paid ? this.STATUS.PAID : this.STATUS.PENDING;
     return this;
   }
 
   pay() {
-    this.paid = true;
-    this.status = this.STATUS.PAID;
+    this.status = statuses.PAID;
     return this;
   }
 
@@ -89,11 +86,15 @@ module.exports = class Reservation {
       throw new Error("La reserva no puede finalizarse porque no está paga.")
     }
 
-    this.status = this.STATUS.FINISHED;
+    this.status = statuses.FINISHED;
     return this;
   }
 
   unblock() {
-    this.status = this.STATUS.PENDING;
+    this.status = statuses.PENDING;
+  }
+
+  get paid(){
+    return this.status.value === statuses.PAID.value;
   }
 };

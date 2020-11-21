@@ -33,11 +33,11 @@ module.exports = class CarController {
   async index(req, res) {
     const carsLength = await this.carService.getCarsLength();
     let lastAddedCar;
-    try{
+    try {
       lastAddedCar = await this.carService.getLastCar();
-    }catch(e){
+    } catch (e) {
       lastAddedCar = null;
-    }finally{
+    } finally {
       res.render(`${this.CAR_VIEWS}/index.njk`, {
         title: 'Rent a Car',
         carsLength,
@@ -69,11 +69,11 @@ module.exports = class CarController {
       throw new CarIdNotDefinedError();
     }
 
-    const { car, reservations } = await this.carService.getById(carId);
+    const car = await this.carService.getById(carId);
     res.render(`${this.CAR_VIEWS}/view.njk`, {
       title: `Viewing ${car.brand} ${car.model} ${car.year}`,
       car,
-      reservations,
+      reservations: car.reservations,
     });
   }
 
@@ -87,7 +87,7 @@ module.exports = class CarController {
       throw new CarIdNotDefinedError();
     }
 
-    const { car } = await this.carService.getById(carId);
+    const car = await this.carService.getById(carId);
     res.render(`${this.CAR_VIEWS}/edit.njk`, {
       title: `Editing ${car.brand} ${car.model} #${car.id}`,
       car,
@@ -115,7 +115,7 @@ module.exports = class CarController {
       car.img = path;
     }
     await this.carService.save(car);
-    res.redirect('/');
+    res.redirect(this.ROUTE_BASE);
   }
 
   /**
@@ -124,8 +124,8 @@ module.exports = class CarController {
    */
   async delete(req, res) {
     const { carId } = req.params;
-    const { car } = await this.carService.getById(carId);
+    const car = await this.carService.getById(carId);
     this.carService.delete(car);
-    res.redirect('/');
+    res.redirect(this.ROUTE_BASE);
   }
 };

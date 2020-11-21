@@ -8,14 +8,14 @@
             <label class="label">Fecha de inicio</label>
             <div class="control">
                 <input required class="input" name="start-date" type="datetime-local"
-                       value="{{ reservation.startDate if reservation }}">
+                       value="{{ reservation.startDate.toISOString() | truncate(19, true, "") if reservation }}">
             </div>
         </div>
         <div class="field">
             <label class="label">Fecha de fin</label>
             <div class="control">
                 <input required class="input" name="finish-date" type="datetime-local"
-                       value="{{ reservation.finishDate if reservation }}">
+                       value="{{ reservation.finishDate.toISOString() | truncate(19, true, "") if reservation }}">
             </div>
         </div>
         <div class="field">
@@ -84,7 +84,7 @@
                 <label class="radio"><input required type="radio" name="paid" value="true" {{ 'checked' if reservation.paid === true }}>
                     Si
                 </label>
-                <label class="radio"><input required type="radio" name="paid" value=""{{ 'checked' if reservation.paid === false }}>
+                <label class="radio"><input required type="radio" name="paid" value="" {{ 'checked' if reservation.paid === false }}>
                     No
                 </label>
             </div>

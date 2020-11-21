@@ -1,4 +1,18 @@
 const Reservation = require('../entity/Reservation');
+const { ReservationStatus, statuses } = require('../entity/ReservationStatus');
+
+/**
+ * 
+ * @param {Number} statusId 
+ * @returns {ReservationStatus}
+ */
+function getReservationStatusById(statusId) {
+  /**
+   * @type {ReservationStatus[]}
+   */
+  const statusesList = Object.values(statuses);
+  return statusesList.find(status => status.value == statusId);
+}
 
 exports.fromModelToEntity = ({
   id,
@@ -7,13 +21,14 @@ exports.fromModelToEntity = ({
   pricePerDay,
   totalPrice,
   paymentMethod,
-  paid,
   status,
   carId,
   userId,
   createdAt,
   updatedAt,
-}) =>
+  Car,
+  User
+}, fromCarModelToEntityMapper, fromUserModelToEntityMapper) =>
   new Reservation(
     id,
     startDate,
@@ -21,12 +36,13 @@ exports.fromModelToEntity = ({
     pricePerDay,
     totalPrice,
     paymentMethod,
-    paid,
-    status,
+    getReservationStatusById(status),
     carId,
     userId,
     createdAt,
-    updatedAt
+    updatedAt,
+    Car ? fromCarModelToEntityMapper(Car) : {},
+    User ? fromUserModelToEntityMapper(User) : {}
   );
 
 exports.fromFormToEntity = ({
@@ -36,7 +52,6 @@ exports.fromFormToEntity = ({
   'price-per-day': pricePerDay,
   'total-price': totalPrice,
   'payment-method': paymentMethod,
-  paid,
   status,
   'car-id': carId,
   'user-id': userId,
@@ -49,7 +64,6 @@ exports.fromFormToEntity = ({
     pricePerDay,
     totalPrice,
     paymentMethod,
-    Boolean(paid),
     status,
     Number(carId),
     Number(userId),

@@ -24,19 +24,21 @@ module.exports = class ReservationRepository {
     if (!(reservation instanceof Reservation)) {
       throw new ReservationNotDefinedError();
     }
-    const reservationInstance = this.reservationModel.build(reservation, {
-      isNewRecord: !reservation.id,
+    const reservationData = Object.assign({}, reservation);
+    reservationData.status = reservation.status.value;
+
+    const reservationInstance = this.reservationModel.build(reservationData, {
+      isNewRecord: !reservationData.id,
     });
     await reservationInstance.save();
-    return fromModelToEntity(reservationInstance);
+    return fromModelToEntity(reservationInstance, fromCarModelToEntity, fromUserModelToEntity);
   }
 
   async getAll() {
-    const reservationInstances = await this.reservationModel.findAll();
-    const reservations = reservationInstances.map((reservationInstance) =>
-      fromModelToEntity(reservationInstance)
-    );
-    return reservations;
+    const reservationInstances = await this.reservationModel.findAll({
+      include: [CarModel, UserModel],
+    });
+    return reservationInstances.map(r => fromModelToEntity(r, fromCarModelToEntity, fromUserModelToEntity));
   }
 
   /**
@@ -54,15 +56,11 @@ module.exports = class ReservationRepository {
         `There is no existing reservation with ID ${reservationId}`
       );
     }
-    const reservation = fromModelToEntity(reservationInstance);
-    let car;
-    if (reservationInstance.Car) {
-      car = fromCarModelToEntity(reservationInstance.Car);
-    } else {
-      car = reservationInstance.Car;
-    }
-    const user = fromUserModelToEntity(reservationInstance.User);
-    return { reservation, car, user };
+
+    return fromModelToEntity(reservationInstance, fromCarModelToEntity, fromUserModelToEntity);
+  }
+
+  async getByStatus(...statuses) {
     const reservationInstances = await this.reservationModel.findAll({
       include: [CarModel, UserModel],
       where: {

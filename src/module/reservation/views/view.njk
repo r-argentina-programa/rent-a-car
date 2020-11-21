@@ -24,7 +24,7 @@
                     <tr>
                         <th>Auto</th>
                         <td>
-                            <a href={{ "/car/view/" + car.id }}>{{ "#" + car.id + " " + car.brand + " " + car.model + " " + car.year }}</a>
+                            <a href={{ "/car/view/" + reservation.car.id }}>{{ reservation.car.name }}</a>
                         </td>
                     </tr>
                     <tr>
@@ -38,7 +38,7 @@
                     <tr>
                         <th>Usuario</th>
                         <td>
-                            <a href={{ "/user/view/" + user.id }}>{{ "#" + user.id + " " + user.firstName + " " + user.lastName }}</a>
+                            <a href={{ "/user/view/" + reservation.user.id }}>{{ "#" + reservation.user.id + " " + reservation.user.fullName }}</a>
                         </td>
                     </tr>
                     <tr>
@@ -51,7 +51,7 @@
                     </tr>
                     <tr>
                         <th>Estado</th>
-                        <td>{{ reservation.status }}</td>
+                        <td>{{ reservation.status.name }}</td>
                     </tr>
                     <tr>
                         <th>Creado</th>

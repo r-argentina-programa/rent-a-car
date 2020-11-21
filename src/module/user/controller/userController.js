@@ -45,11 +45,11 @@ module.exports = class userController {
       throw new UserIdNotDefinedError();
     }
 
-    const { user, reservations } = await this.userService.getById(userId);
+    const user = await this.userService.getById(userId);
     res.render(`${this.USER_VIEWS}/view.njk`, {
       title: `Viewing User #${user.id}`,
       user,
-      reservations,
+      reservations: user.reservations,
     });
   }
 
@@ -63,7 +63,7 @@ module.exports = class userController {
       throw new UserIdNotDefinedError();
     }
 
-    const { user } = await this.userService.getById(userId);
+    const user = await this.userService.getById(userId);
     res.render(`${this.USER_VIEWS}/edit.njk`, {
       title: `Editing User #${user.id}`,
       user,

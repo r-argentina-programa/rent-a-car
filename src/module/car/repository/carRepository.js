@@ -1,7 +1,4 @@
 const { fromModelToEntity } = require('../mapper/carMapper');
-const {
-  fromModelToEntity: fromReservationModelToEntity,
-} = require('../../reservation/mapper/reservationMapper');
 const Car = require('../entity/Car');
 const CarNotDefinedError = require('../error/CarNotDefinedError');
 const CarIdNotDefinedError = require('../error/CarIdNotDefinedError');
@@ -33,8 +30,7 @@ module.exports = class CarRepository {
 
   async getAll() {
     const carInstances = await this.carModel.findAll();
-    const cars = carInstances.map((carInstance) => fromModelToEntity(carInstance));
-    return cars;
+    return carInstances.map((carInstance) => fromModelToEntity(carInstance));
   }
 
   async getCarsLength() {
@@ -50,6 +46,7 @@ module.exports = class CarRepository {
 
   /**
    * @param {number} carId
+   * @returns {Promise<import('../entity/Car')>}
    */
   async getById(carId) {
     if (!Number(carId)) {
@@ -61,15 +58,7 @@ module.exports = class CarRepository {
       throw new CarNotFoundError(`There is no existing car with ID ${carId}`);
     }
 
-    const car = fromModelToEntity(carInstance);
-    /**
-     * @type {import('../../reservation/entity/Reservation')[]} reservations
-     */
-    const reservations = carInstance.Reservations.map((instance) =>
-      fromReservationModelToEntity(instance)
-    );
-
-    return { car, reservations };
+    return fromModelToEntity(carInstance);
   }
 
   /**

@@ -19,7 +19,7 @@ function fillModal(evt) {
   const reservation = evt.target.closest('.reservation-data');
   const { id, status } = reservation.dataset;
 
-  if (status === ReservationStatus.PENDING.value) {
+  if (status == ReservationStatus.PENDING.value) {
     $modalTitle.textContent = 'Marcar reserva como paga';
     $statusButton.textContent = 'Marcar como paga';
     $modalContent.textContent = `Confirma marcar reserva ID ${id} como Paga?`;

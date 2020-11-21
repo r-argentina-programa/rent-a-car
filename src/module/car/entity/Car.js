@@ -13,6 +13,7 @@ module.exports = class Car {
    * @param {string} img
    * @param {string} createdAt
    * @param {string} updatedAt
+   * @param {import('../../reservation/entity/Reservation')[]} reservations
    */
   constructor(
     id,
@@ -27,7 +28,8 @@ module.exports = class Car {
     price,
     img,
     createdAt,
-    updatedAt
+    updatedAt,
+    reservations
   ) {
     this.id = id;
     this.brand = brand;
@@ -42,5 +44,10 @@ module.exports = class Car {
     this.img = img;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.reservations = reservations;
+  }
+
+  get name(){
+    return `${this.brand} ${this.model}`;
   }
 };

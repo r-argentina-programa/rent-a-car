@@ -33,7 +33,7 @@ module.exports = class DefaultController {
     });
   }
 
-  async reservationStatus(req, res){
-    res.send(`window.ReservationStatus = ${JSON.stringify(reservationStatus)}`);
+  async reservationStatus(req, res) {
+    res.send(`window.ReservationStatus = ${JSON.stringify(reservationStatuses)}`);
   }
 };

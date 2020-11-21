@@ -2,6 +2,7 @@ const Car = require('../entity/Car');
 const CarNotDefinedError = require('../error/CarNotDefinedError');
 const CarIdNotDefinedError = require('../error/CarIdNotDefinedError');
 
+
 module.exports = class CarService {
   /**
    * @param {import('../repository/carRepository')} carRepository
@@ -35,6 +36,7 @@ module.exports = class CarService {
 
   /**
    * @param {number} carId
+   * @returns {Promise<Car>}
    */
   async getById(carId) {
     if (!Number(carId)) {

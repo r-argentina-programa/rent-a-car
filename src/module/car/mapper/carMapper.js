@@ -1,3 +1,4 @@
+const { fromModelToEntity: reservationModelToEntityMapper } = require('../../reservation/mapper/reservationMapper');
 const Car = require('../entity/Car');
 
 exports.fromModelToEntity = ({
@@ -14,6 +15,7 @@ exports.fromModelToEntity = ({
   img,
   createdAt,
   updatedAt,
+  Reservations = []
 }) =>
   new Car(
     Number(id),
@@ -28,7 +30,8 @@ exports.fromModelToEntity = ({
     Number(price),
     img,
     createdAt,
-    updatedAt
+    updatedAt,
+    Reservations.map(reservationModelToEntityMapper)
   );
 
 exports.fromFormToEntity = ({

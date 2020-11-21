@@ -4,29 +4,37 @@ const createTestCar = require('../../../car/controller/__test__/cars.fixture');
 const ReservationNotDefinedError = require('../../error/ReservationNotDefinedError');
 const CarNotDefinedError = require('../../../car/error/CarNotDefinedError');
 const ReservationIdNotDefinedError = require('../../error/ReservationIdNotDefinedError');
-
-const repositoryMock = {
-  save: jest.fn(),
-  getAll: jest.fn(),
-  getById: jest.fn(),
-};
-
-const mockService = new ReservationService(repositoryMock);
+const { statuses } = require('../../entity/ReservationStatus');
 
 describe('ReservationService methods', () => {
+
+  let repositoryMock;
+
+  /**
+   * @type {import('../reservationService')}
+   */
+  let reservationService;
+  beforeEach(() => {
+    repositoryMock = {
+      save: jest.fn(),
+      getAll: jest.fn(),
+      getById: jest.fn(),
+    };
+
+    reservationService = new ReservationService(repositoryMock);
+
+  })
   afterEach(() => {
     Object.values(repositoryMock).forEach((mockFn) => mockFn.mockClear());
   });
 
   test("save calls repository's save method, price per day and total price is taken from the reservation", async () => {
     const reservation = createTestReservation(1);
-    reservation.totalPrice = undefined;
-    reservation.status = undefined;
     const car = createTestCar(1);
-    await mockService.save(reservation, car);
+    await reservationService.makeReservation(reservation, car);
 
     expect(reservation.totalPrice).toEqual(3000);
-    expect(reservation.status).toEqual('Confirmed');
+    expect(reservation.status).toEqual(statuses.PAID);
     expect(repositoryMock.save).toHaveBeenCalledTimes(1);
     expect(repositoryMock.save).toHaveBeenCalledWith(reservation);
   });
@@ -34,15 +42,13 @@ describe('ReservationService methods', () => {
   test("save calls repository's save method, price per day and total price is taken from the car's price", async () => {
     const reservation = createTestReservation(1);
     reservation.pricePerDay = undefined;
-    reservation.totalPrice = undefined;
-    reservation.status = undefined;
     const car = createTestCar(1);
     car.price = 4000;
-    await mockService.save(reservation, car);
+    await reservationService.makeReservation(reservation, car);
 
     expect(reservation.pricePerDay).toEqual(4000);
     expect(reservation.totalPrice).toEqual(12000);
-    expect(reservation.status).toEqual('Confirmed');
+    expect(reservation.status).toEqual(statuses.PAID);
     expect(repositoryMock.save).toHaveBeenCalledTimes(1);
     expect(repositoryMock.save).toHaveBeenCalledWith(reservation);
   });
@@ -50,22 +56,21 @@ describe('ReservationService methods', () => {
   test('save throws an error because of lack of Reservation entity as argument', async () => {
     const reservation = { id: 1, firstName: 'Juan', lastName: 'Lopez' };
 
-    await expect(mockService.save(reservation)).rejects.toThrowError(ReservationNotDefinedError);
+    await expect(reservationService.makeReservation(reservation)).rejects.toThrowError(ReservationNotDefinedError);
   });
 
   test('save throws an error because of lack of Car entity as argument', async () => {
     const reservation = createTestReservation(1);
     const car = { id: 1, brand: 'Ford', model: 'Fiesta' };
 
-    await expect(mockService.save(reservation, car)).rejects.toThrowError(CarNotDefinedError);
+    await expect(reservationService.makeReservation(reservation, car)).rejects.toThrowError(CarNotDefinedError);
   });
 
   test("finish calls repository's save method", async () => {
     const reservation = createTestReservation(1);
-    reservation.status = undefined;
-    await mockService.finish(reservation);
+    await reservationService.finish(reservation);
 
-    expect(reservation.status).toEqual('Finished');
+    expect(reservation.status).toEqual(statuses.FINISHED);
     expect(repositoryMock.save).toHaveBeenCalledTimes(1);
     expect(repositoryMock.save).toHaveBeenCalledWith(reservation);
   });
@@ -73,27 +78,15 @@ describe('ReservationService methods', () => {
   test('finish throws an error because of lack of Reservation entity as argument', async () => {
     const reservation = { id: 1, firstName: 'Juan', lastName: 'Lopez' };
 
-    await expect(mockService.finish(reservation)).rejects.toThrowError(ReservationNotDefinedError);
+    await expect(reservationService.finish(reservation)).rejects.toThrowError(ReservationNotDefinedError);
   });
 
   test("unblock calls repository's save method, sets reservation to 'Confirmed' status", async () => {
     const reservation = createTestReservation(1);
-    reservation.status = undefined;
-    reservation.paid = true;
-    await mockService.unblock(reservation);
+    reservation.status = statuses.FINISHED;
+    await reservationService.unblock(reservation);
 
-    expect(reservation.status).toEqual('Confirmed');
-    expect(repositoryMock.save).toHaveBeenCalledTimes(1);
-    expect(repositoryMock.save).toHaveBeenCalledWith(reservation);
-  });
-
-  test("unblock calls repository's save method, sets reservation to 'Pending' status", async () => {
-    const reservation = createTestReservation(1);
-    reservation.status = undefined;
-    reservation.paid = false;
-    await mockService.unblock(reservation);
-
-    expect(reservation.status).toEqual('Pending');
+    expect(reservation.status).toEqual(statuses.PENDING);
     expect(repositoryMock.save).toHaveBeenCalledTimes(1);
     expect(repositoryMock.save).toHaveBeenCalledWith(reservation);
   });
@@ -101,17 +94,16 @@ describe('ReservationService methods', () => {
   test('unblock throws an error because of lack of Reservation entity as argument', async () => {
     const reservation = { id: 1, firstName: 'Juan', lastName: 'Lopez' };
 
-    await expect(mockService.unblock(reservation)).rejects.toThrowError(ReservationNotDefinedError);
+    await expect(reservationService.unblock(reservation)).rejects.toThrowError(ReservationNotDefinedError);
   });
 
   test("pay calls repository's save method, sets reservation to 'Confirmed' status", async () => {
     const reservation = createTestReservation(1);
-    reservation.status = undefined;
-    reservation.paid = undefined;
-    await mockService.pay(reservation);
+    reservation.status = statuses.PENDING;
+    await reservationService.pay(reservation);
 
     expect(reservation.paid).toEqual(true);
-    expect(reservation.status).toEqual('Confirmed');
+    expect(reservation.status).toEqual(statuses.PAID);
     expect(repositoryMock.save).toHaveBeenCalledTimes(1);
     expect(repositoryMock.save).toHaveBeenCalledWith(reservation);
   });
@@ -119,23 +111,23 @@ describe('ReservationService methods', () => {
   test('pay throws an error because of lack of Reservation entity as argument', async () => {
     const reservation = { id: 1, firstName: 'Juan', lastName: 'Lopez' };
 
-    await expect(mockService.pay(reservation)).rejects.toThrowError(ReservationNotDefinedError);
+    await expect(reservationService.pay(reservation)).rejects.toThrowError(ReservationNotDefinedError);
   });
 
   test("getAll calls repository's getAll method", async () => {
-    await mockService.getAll();
+    await reservationService.getAll();
 
     expect(repositoryMock.getAll).toHaveBeenCalledTimes(1);
   });
 
   test("getById calls repository's getById method", async () => {
-    await mockService.getById(1);
+    await reservationService.getById(1);
 
     expect(repositoryMock.getById).toHaveBeenCalledTimes(1);
     expect(repositoryMock.getById).toHaveBeenCalledWith(1);
   });
 
   test('getById throws an error on undefined reservationId as argument', async () => {
-    await expect(mockService.getById()).rejects.toThrowError(ReservationIdNotDefinedError);
+    await expect(reservationService.getById()).rejects.toThrowError(ReservationIdNotDefinedError);
   });
 });

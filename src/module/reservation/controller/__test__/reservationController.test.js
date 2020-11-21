@@ -2,49 +2,51 @@ const ReservationController = require('../reservationController');
 const createTestReservation = require('./reservation.fixture');
 const createTestCar = require('../../../car/controller/__test__/cars.fixture');
 const createTestUser = require('../../../user/controller/__test__/user.fixture');
+const { statuses: reservationStatuses } = require('../../entity/ReservationStatus')
 const ReservationIdNotDefinedError = require('../../error/ReservationIdNotDefinedError');
 
-const reservationServiceMock = {
-  save: jest.fn(),
-  finish: jest.fn(),
-  unblock: jest.fn(),
-  pay: jest.fn(),
-  getAll: jest.fn(() => Array.from({ length: 3 }, (id) => createTestReservation(id + 1))),
-  getById: jest.fn((id) => {
-    return {
-      reservation: createTestReservation(id),
-      car: createTestCar(1),
-      user: createTestUser(1),
-    };
-  }),
-};
+let reservationServiceMock;
+let carServiceMock;
+let userServiceMock;
+let reqMock;
+let resMock;
+let reservationController;
 
-const carServiceMock = {
-  getAll: jest.fn(),
-  getById: jest.fn(() => {
-    return {
-      car: undefined,
-    };
-  }),
-};
+beforeEach(() => {
+  reservationServiceMock = {
+    makeReservation: jest.fn(),
+    finish: jest.fn(),
+    unblock: jest.fn(),
+    pay: jest.fn(),
+    getAll: jest.fn(() => Array.from({ length: 3 }, (id) => createTestReservation(id + 1))),
+    getById: jest.fn(id => createTestReservation(id))
+  };
 
-const userServiceMock = {
-  getAll: jest.fn(),
-};
+  carServiceMock = {
+    getAll: jest.fn(() => [createTestCar(1)]),
+    getById: jest.fn(() => undefined),
+  };
 
-const reqMock = {
-  params: { reservationId: 1 },
-};
-const resMock = {
-  render: jest.fn(),
-  redirect: jest.fn(),
-};
+  userServiceMock = {
+    getAll: jest.fn(() => [createTestUser(1)]),
+    getById: jest.fn()
+  };
 
-const mockController = new ReservationController(
-  reservationServiceMock,
-  carServiceMock,
-  userServiceMock
-);
+  reqMock = {
+    params: { reservationId: 1 },
+  };
+
+  resMock = {
+    render: jest.fn(),
+    redirect: jest.fn(),
+  };
+
+  reservationController = new ReservationController(
+    reservationServiceMock,
+    carServiceMock,
+    userServiceMock
+  );
+});
 
 describe('ReservationController methods', () => {
   afterEach(() => {
@@ -57,7 +59,7 @@ describe('ReservationController methods', () => {
       get: jest.fn(),
       post: jest.fn(),
     };
-    mockController.configureRoutes(app);
+    reservationController.configureRoutes(app);
 
     expect(app.get).toHaveBeenCalled();
     expect(app.post).toHaveBeenCalled();
@@ -65,27 +67,27 @@ describe('ReservationController methods', () => {
 
   test('manage renders manage.njk with a list of reservations', async () => {
     const reservations = reservationServiceMock.getAll();
-    await mockController.manage(reqMock, resMock);
+    await reservationController.manage(reqMock, resMock);
 
     expect(reservationServiceMock.getAll).toHaveBeenCalledTimes(2);
     expect(resMock.render).toHaveBeenCalledTimes(1);
+
     expect(resMock.render).toHaveBeenCalledWith('reservation/views/manage.njk', {
       title: 'Reservation List',
       reservations,
+      reservationStatuses
     });
   });
 
   test('view renders view.njk with a single reservation', async () => {
-    const { reservation, car, user } = reservationServiceMock.getById(1);
-    await mockController.view(reqMock, resMock);
+    const reservation = reservationServiceMock.getById(1);
+    await reservationController.view(reqMock, resMock);
 
     expect(reservationServiceMock.getById).toHaveBeenCalledTimes(2);
     expect(resMock.render).toHaveBeenCalledTimes(1);
     expect(resMock.render).toHaveBeenCalledWith('reservation/views/view.njk', {
       title: 'Viewing Reservation #1',
-      reservation,
-      car,
-      user,
+      reservation
     });
   });
 
@@ -95,23 +97,23 @@ describe('ReservationController methods', () => {
     };
 
     await expect(() =>
-      mockController.view(reqMockWithoutReservationId, resMock)
+      reservationController.view(reqMockWithoutReservationId, resMock)
     ).rejects.toThrowError(ReservationIdNotDefinedError);
   });
 
   test('edit renders a form to edit a reservation', async () => {
-    const { reservation } = reservationServiceMock.getById(1);
+    const reservation = reservationServiceMock.getById(1);
     const cars = carServiceMock.getAll();
     const users = userServiceMock.getAll();
-    await mockController.edit(reqMock, resMock);
+    await reservationController.edit(reqMock, resMock);
 
     expect(reservationServiceMock.getById).toHaveBeenCalledTimes(2);
     expect(resMock.render).toHaveBeenCalledTimes(1);
     expect(resMock.render).toHaveBeenCalledWith('reservation/views/edit.njk', {
       title: 'Editing Reservation #1',
       reservation,
-      cars,
       users,
+      cars
     });
   });
 
@@ -121,14 +123,17 @@ describe('ReservationController methods', () => {
     };
 
     await expect(() =>
-      mockController.edit(reqMockWithoutReservationId, resMock)
+      reservationController.edit(reqMockWithoutReservationId, resMock)
     ).rejects.toThrowError(ReservationIdNotDefinedError);
   });
+
 
   test('add renders a form to add a new reservation', async () => {
     const cars = carServiceMock.getAll();
     const users = userServiceMock.getAll();
-    await mockController.add(reqMock, resMock);
+    const nextMock = jest.fn();
+
+    await reservationController.add(reqMock, resMock, nextMock)
 
     expect(resMock.render).toHaveBeenCalledTimes(1);
     expect(resMock.render).toHaveBeenCalledWith('reservation/views/add.njk', {
@@ -136,6 +141,18 @@ describe('ReservationController methods', () => {
       cars,
       users,
     });
+  });
+
+  test('add bubbles up the error when there are no cars or no users available', async () => {
+    const nextMock = jest.fn();
+    reservationController = new ReservationController(
+      reservationServiceMock,
+      { getAll: jest.fn(() => []) },
+      { getAll: jest.fn(() => []) },
+    );
+
+    await reservationController.add(reqMock, resMock, nextMock)
+    expect(resMock.render).toHaveBeenCalledTimes(0);
   });
 
   test('saves a reservation', async () => {
@@ -154,15 +171,15 @@ describe('ReservationController methods', () => {
       },
     };
 
-    await mockController.save(reqSaveMock, resMock);
-    expect(reservationServiceMock.save).toHaveBeenCalledTimes(1);
-    expect(reservationServiceMock.save).toHaveBeenCalledWith(createTestReservation(1), undefined);
+    await reservationController.save(reqSaveMock, resMock);
+    expect(reservationServiceMock.makeReservation).toHaveBeenCalledTimes(1);
+    expect(reservationServiceMock.makeReservation).toHaveBeenCalledWith(createTestReservation(1), undefined);
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
   });
 
   test('mark a reservation as finished', async () => {
     const reservation = createTestReservation(1);
-    await mockController.finish(reqMock, resMock);
+    await reservationController.finish(reqMock, resMock);
 
     expect(reservationServiceMock.finish).toHaveBeenCalledTimes(1);
     expect(reservationServiceMock.finish).toHaveBeenCalledWith(reservation);
@@ -174,13 +191,13 @@ describe('ReservationController methods', () => {
     };
 
     await expect(() =>
-      mockController.finish(reqMockWithoutReservationId, resMock)
+      reservationController.finish(reqMockWithoutReservationId, resMock)
     ).rejects.toThrowError(ReservationIdNotDefinedError);
   });
 
   test('unblock a finished reservation', async () => {
     const reservation = createTestReservation(1);
-    await mockController.unblock(reqMock, resMock);
+    await reservationController.unblock(reqMock, resMock);
 
     expect(reservationServiceMock.unblock).toHaveBeenCalledTimes(1);
     expect(reservationServiceMock.unblock).toHaveBeenCalledWith(reservation);
@@ -192,13 +209,13 @@ describe('ReservationController methods', () => {
     };
 
     await expect(() =>
-      mockController.unblock(reqMockWithoutReservationId, resMock)
+      reservationController.unblock(reqMockWithoutReservationId, resMock)
     ).rejects.toThrowError(ReservationIdNotDefinedError);
   });
 
   test('pay a finished reservation', async () => {
     const reservation = createTestReservation(1);
-    await mockController.pay(reqMock, resMock);
+    await reservationController.pay(reqMock, resMock);
 
     expect(reservationServiceMock.pay).toHaveBeenCalledTimes(1);
     expect(reservationServiceMock.pay).toHaveBeenCalledWith(reservation);
@@ -210,7 +227,7 @@ describe('ReservationController methods', () => {
     };
 
     await expect(() =>
-      mockController.pay(reqMockWithoutReservationId, resMock)
+      reservationController.pay(reqMockWithoutReservationId, resMock)
     ).rejects.toThrowError(ReservationIdNotDefinedError);
   });
 });

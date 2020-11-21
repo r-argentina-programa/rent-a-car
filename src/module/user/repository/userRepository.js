@@ -17,7 +17,7 @@ module.exports = class UserRepository {
    * @param {import('../entity/User')} user
    */
   async save(user) {
-    if (!user instanceof User) {
+    if (!(user instanceof User)) {
       throw new UserNotDefinedError();
     }
 

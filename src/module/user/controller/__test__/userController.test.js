@@ -5,17 +5,7 @@ const UserIdNotDefinedError = require('../../error/UserIdNotDefinedError');
 const serviceMock = {
   save: jest.fn(),
   getAll: jest.fn(() => Array.from({ length: 3 }, (id) => createTestUser(id + 1))),
-  getById: jest.fn((id) => {
-    return {
-      user: createTestUser(id),
-      reservations: Array.from({ length: 3 }, (reservationId) => {
-        return {
-          id: reservationId + 1,
-          carId: '1',
-        };
-      }),
-    };
-  }),
+  getById: jest.fn(id => createTestUser(id)),
 };
 
 const reqMock = {
@@ -26,7 +16,7 @@ const resMock = {
   redirect: jest.fn(),
 };
 
-const mockController = new UserController(serviceMock);
+const userController = new UserController(serviceMock);
 
 describe('UserController methods', () => {
   afterEach(() => {
@@ -39,7 +29,7 @@ describe('UserController methods', () => {
       get: jest.fn(),
       post: jest.fn(),
     };
-    mockController.configureRoutes(app);
+    userController.configureRoutes(app);
 
     expect(app.get).toHaveBeenCalled();
     expect(app.post).toHaveBeenCalled();
@@ -47,7 +37,7 @@ describe('UserController methods', () => {
 
   test('manage renders manage.njk with a list of users', async () => {
     const users = serviceMock.getAll();
-    await mockController.manage(reqMock, resMock);
+    await userController.manage(reqMock, resMock);
 
     expect(serviceMock.getAll).toHaveBeenCalledTimes(2);
     expect(resMock.render).toHaveBeenCalledTimes(1);
@@ -58,15 +48,15 @@ describe('UserController methods', () => {
   });
 
   test('view renders view.njk with a single user and its reservations', async () => {
-    const { user, reservations } = serviceMock.getById(1);
-    await mockController.view(reqMock, resMock);
+    const user = serviceMock.getById(1);
+    await userController.view(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(2);
     expect(resMock.render).toHaveBeenCalledTimes(1);
     expect(resMock.render).toHaveBeenCalledWith('user/views/view.njk', {
       title: 'Viewing User #1',
       user,
-      reservations,
+      reservations: user.reservations
     });
   });
 
@@ -75,14 +65,14 @@ describe('UserController methods', () => {
       params: {},
     };
 
-    await expect(() => mockController.view(reqMockWithoutUserId, resMock)).rejects.toThrowError(
+    await expect(() => userController.view(reqMockWithoutUserId, resMock)).rejects.toThrowError(
       UserIdNotDefinedError
     );
   });
 
   test('edit renders a form to edit a user', async () => {
-    const { user } = serviceMock.getById(1);
-    await mockController.edit(reqMock, resMock);
+    const user = serviceMock.getById(1);
+    await userController.edit(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(2);
     expect(resMock.render).toHaveBeenCalledTimes(1);
@@ -97,13 +87,13 @@ describe('UserController methods', () => {
       params: {},
     };
 
-    await expect(() => mockController.edit(reqMockWithoutUserId, resMock)).rejects.toThrowError(
+    await expect(() => userController.edit(reqMockWithoutUserId, resMock)).rejects.toThrowError(
       UserIdNotDefinedError
     );
   });
 
   test('add renders a form to add a new user', () => {
-    mockController.add(reqMock, resMock);
+    userController.add(reqMock, resMock);
     expect(resMock.render).toHaveBeenCalledTimes(1);
     expect(resMock.render).toHaveBeenCalledWith('user/views/add.njk', {
       title: 'Add New User',
@@ -115,7 +105,7 @@ describe('UserController methods', () => {
       body: {},
     };
 
-    await mockController.save(reqSaveMock, resMock);
+    await userController.save(reqSaveMock, resMock);
     expect(serviceMock.save).toHaveBeenCalledTimes(1);
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
   });

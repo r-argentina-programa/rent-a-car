@@ -7,6 +7,7 @@ const createTestReservation = require('../../../reservation/controller/__test__/
 const CarNotDefinedError = require('../../error/CarNotDefinedError');
 const CarIdNotDefinedError = require('../../error/CarIdNotDefinedError');
 const CarNotFoundError = require('../../error/CarNotFoundError');
+const { statuses } = require('../../../reservation/entity/ReservationStatus');
 
 describe('CarRepository methods', () => {
   const sequelize = new Sequelize('sqlite::memory');
@@ -88,15 +89,16 @@ describe('CarRepository methods', () => {
   test('getById returns single car and its reservations from DB', async () => {
     const carWithoutId = createTestCar();
     const reservationWithoutId = createTestReservation();
+    reservationWithoutId.status = statuses.PENDING.value;
     await mockRepository.save(carWithoutId);
 
     const carInstance = await mockRepository.carModel.findByPk(1);
     await carInstance.createReservation(reservationWithoutId);
     await carInstance.createReservation(reservationWithoutId);
 
-    const { car, reservations } = await mockRepository.getById(1);
+    const car = await mockRepository.getById(1);
     expect(car.id).toEqual(1);
-    expect(reservations).toHaveLength(2);
+    expect(car.reservations).toHaveLength(2);
   });
 
   test('getById throws an error on undefined carId as argument', async () => {
@@ -118,8 +120,8 @@ describe('CarRepository methods', () => {
     await mockRepository.save(carWithoutId);
     await mockRepository.save(carWithoutId);
 
-    const { car: carNumberTwo } = await mockRepository.getById(2);
-    const deletedCar = await mockRepository.delete(carNumberTwo);
+    const car = await mockRepository.getById(2);
+    const deletedCar = await mockRepository.delete(car);
     const remainingCars = await mockRepository.getAll();
 
     expect(deletedCar).toEqual(true);

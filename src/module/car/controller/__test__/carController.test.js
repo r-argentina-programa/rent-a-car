@@ -5,17 +5,7 @@ const CarIdNotDefinedError = require('../../error/CarIdNotDefinedError');
 const serviceMock = {
   save: jest.fn(),
   getAll: jest.fn(() => Array.from({ length: 3 }, (id) => createTestCar(id + 1))),
-  getById: jest.fn((id) => {
-    return {
-      car: createTestCar(id),
-      reservations: Array.from({ length: 3 }, (reservationId) => {
-        return {
-          id: reservationId,
-          carId: '1',
-        };
-      }),
-    };
-  }),
+  getById: jest.fn(id => createTestCar(id)),
   getCarsLength: jest.fn(() => 3),
   getLastCar: jest.fn(() => createTestCar(3)),
   delete: jest.fn(),
@@ -81,7 +71,7 @@ describe('CarController methods', () => {
   });
 
   test('view renders view.njk with a single car and its reservations', async () => {
-    const { car, reservations } = serviceMock.getById(1);
+    const car = serviceMock.getById(1);
     await mockController.view(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(2);
@@ -89,7 +79,7 @@ describe('CarController methods', () => {
     expect(resMock.render).toHaveBeenCalledWith('car/views/view.njk', {
       title: 'Viewing Ford Fiesta 2017',
       car,
-      reservations,
+      reservations: car.reservations,
     });
   });
 
@@ -104,7 +94,7 @@ describe('CarController methods', () => {
   });
 
   test('edit renders a form to edit a car', async () => {
-    const { car } = serviceMock.getById(1);
+    const car = serviceMock.getById(1);
     await mockController.edit(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(2);
@@ -153,7 +143,7 @@ describe('CarController methods', () => {
 
     await mockController.save(reqSaveMock, resMock);
     expect(serviceMock.save).toHaveBeenCalledTimes(1);
-    expect(serviceMock.save).toHaveBeenCalledWith(createTestCar(1));
+    expect(serviceMock.save).toHaveBeenCalledWith(createTestCar(1, false));
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
   });
 
@@ -172,7 +162,7 @@ describe('CarController methods', () => {
         price: '3000',
       },
     };
-    const carWithoutPhoto = createTestCar(1);
+    const carWithoutPhoto = createTestCar(1, false);
     carWithoutPhoto.img = undefined;
 
     await mockController.save(reqSaveMock, resMock);

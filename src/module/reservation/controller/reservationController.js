@@ -1,5 +1,5 @@
 const { fromFormToEntity } = require('../mapper/reservationMapper');
-const { statuses: resevationStatuses, statuses } = require('../entity/ReservationStatus');
+const { statuses: reservationStatuses } = require('../entity/ReservationStatus');
 const ReservationError = require('../error/ReservationError');
 const ReservationIdNotDefinedError = require('../error/ReservationIdNotDefinedError');
 
@@ -41,7 +41,7 @@ module.exports = class reservationController {
     res.render(`${this.RESERVATION_VIEWS}/manage.njk`, {
       title: 'Reservation List',
       reservations,
-      resevationStatuses
+      reservationStatuses
     });
   }
 
@@ -119,7 +119,7 @@ module.exports = class reservationController {
     const { "car-id": carId, "user-id": userId } = formData;
     formData.car = await this.carService.getById(carId);
     formData.user = await this.userService.getById(userId);
-    formData.status = formData.paid ? statuses.PAID : statuses.PENDING;
+    formData.status = formData.paid ? reservationStatuses.PAID : reservationStatuses.PENDING;
 
     const reservation = fromFormToEntity(formData);
     await this.reservationService.makeReservation(reservation, formData.car);

@@ -10,15 +10,15 @@
   <td>{{ reservation.car.name }} ID: {{reservation.car.id}}</td>
   <td>{{ reservation.user.fullName }} ({{reservation.user.email}})</td>
   <td>
-    {% if reservation.status.value == resevationStatuses.PENDING.value %}
+    {% if reservation.status.value == reservationStatuses.PENDING.value %}
       {% include "reservation/views/layouts/status-pending-buttons.njk" %}
     {% endif %}
 
-    {% if reservation.status.value == resevationStatuses.PAID.value %}
+    {% if reservation.status.value == reservationStatuses.PAID.value %}
       {% include "reservation/views/layouts/status-confirmed-buttons.njk" %}
     {% endif %}
 
-    {% if reservation.status.value == resevationStatuses.FINISHED.value %}
+    {% if reservation.status.value == reservationStatuses.FINISHED.value %}
       {% include "reservation/views/layouts/status-finished-buttons.njk" %}
     {% endif %}
 

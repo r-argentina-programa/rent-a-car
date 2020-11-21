@@ -1,4 +1,5 @@
 const Reservation = require('../../entity/Reservation');
+const { ReservationStatus } = require('../../entity/ReservationStatus');
 
 module.exports = function createTestReservation(id) {
   return new Reservation(
@@ -8,8 +9,7 @@ module.exports = function createTestReservation(id) {
     1000,
     3000,
     'Cash',
-    true,
-    'Confirmed',
+    new ReservationStatus('Paga', 1),
     1,
     1
   );

@@ -13,6 +13,7 @@ module.exports = class Car {
    * @param {string} img
    * @param {string} createdAt
    * @param {string} updatedAt
+   * @param {string} deletedAt
    * @param {import('../../reservation/entity/Reservation')[]} reservations
    */
   constructor(
@@ -29,6 +30,7 @@ module.exports = class Car {
     img,
     createdAt,
     updatedAt,
+    deletedAt,
     reservations
   ) {
     this.id = id;
@@ -44,6 +46,7 @@ module.exports = class Car {
     this.img = img;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.deletedAt = deletedAt;
     this.reservations = reservations;
   }
 

@@ -9,63 +9,66 @@
                 </h1>
                 <table class="table">
                     <tbody>
-                    <tr>
-                        <th>ID</th>
-                        <td>{{ reservation.id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Start Date</th>
-                        <td>{{ reservation.formattedDates.startDate }}</td>
-                    </tr>
-                    <tr>
-                        <th>Finish Date</th>
-                        <td>{{ reservation.formattedDates.finishDate }}</td>
-                    </tr>
-                    <tr>
-                        <th>Auto</th>
-                        <td>
-                            <a href={{ "/car/view/" + reservation.car.id }}>{{ reservation.car.name }}</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Precio por día</th>
-                        <td>$ {{ reservation.pricePerDay }}</td>
-                    </tr>
-                    <tr>
-                        <th>Precio total</th>
-                        <td>$ {{ reservation.totalPrice }}</td>
-                    </tr>
-                    <tr>
-                        <th>Usuario</th>
-                        <td>
-                            <a href={{ "/user/view/" + reservation.user.id }}>{{ "#" + reservation.user.id + " " + reservation.user.fullName }}</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Método de pago</th>
-                        <td>{{ reservation.paymentMethod }}</td>
-                    </tr>
-                    <tr>
-                        <th>Pago</th>
-                        <td>{{ "Yes" if reservation.paid else "No" }}</td>
-                    </tr>
-                    <tr>
-                        <th>Estado</th>
-                        <td>{{ reservation.status.name }}</td>
-                    </tr>
-                    <tr>
-                        <th>Creado</th>
-                        <td>{{ reservation.createdAt }}</td>
-                    </tr>
-                    <tr>
-                        <th>Actualizado</th>
-                        <td>{{ reservation.updatedAt }}</td>
-                    </tr>
+                        <tr>
+                            <th>ID</th>
+                            <td>{{ reservation.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Start Date</th>
+                            <td>{{ reservation.formattedDates.startDate }}</td>
+                        </tr>
+                        <tr>
+                            <th>Finish Date</th>
+                            <td>{{ reservation.formattedDates.finishDate }}</td>
+                        </tr>
+                        <tr>
+                            <th>Auto</th>
+                            <td>
+                                <a href={{ "/car/view/" + reservation.car.id }}>{{ reservation.car.name }}</a>
+                                {{ "(Eliminado)" if reservation.car.deletedAt }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Precio por día</th>
+                            <td>$ {{ reservation.pricePerDay }}</td>
+                        </tr>
+                        <tr>
+                            <th>Precio total</th>
+                            <td>$ {{ reservation.totalPrice }}</td>
+                        </tr>
+                        <tr>
+                            <th>Usuario</th>
+                            <td>
+                                <a href={{ "/user/view/" + reservation.user.id }}>{{ "#" + reservation.user.id + " " + reservation.user.fullName }}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Método de pago</th>
+                            <td>{{ reservation.paymentMethod }}</td>
+                        </tr>
+                        <tr>
+                            <th>Pago</th>
+                            <td>{{ "Yes" if reservation.paid else "No" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Estado</th>
+                            <td>{{ reservation.status.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Creado</th>
+                            <td>{{ reservation.createdAt }}</td>
+                        </tr>
+                        <tr>
+                            <th>Actualizado</th>
+                            <td>{{ reservation.updatedAt }}</td>
+                        </tr>
                     </tbody>
                 </table>
                 <a class="button is-link is-outlined" href="{{ '/reservation/edit/' + reservation.id }}">
                     <span>Edit</span>
-                    <span class="icon is-small"><i class="fas fa-edit"></i></span>
+                    <span class="icon is-small">
+                        <i class="fas fa-edit"></i>
+                    </span>
                 </a>
             </div>
         </div>

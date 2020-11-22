@@ -36,7 +36,10 @@ module.exports = class ReservationRepository {
 
   async getAll() {
     const reservationInstances = await this.reservationModel.findAll({
-      include: [CarModel, UserModel],
+      include: [
+        {model: CarModel, paranoid: false},
+        {model: UserModel, paranoid: false},
+      ],
     });
     return reservationInstances.map(r => fromModelToEntity(r, fromCarModelToEntity, fromUserModelToEntity));
   }
@@ -49,7 +52,10 @@ module.exports = class ReservationRepository {
       throw new ReservationIdNotDefinedError();
     }
     const reservationInstance = await this.reservationModel.findByPk(reservationId, {
-      include: [CarModel, UserModel],
+      include: [
+        {model: CarModel, paranoid: false},
+        {model: UserModel, paranoid: false},
+      ],
     });
     if (!reservationInstance) {
       throw new ReservationNotFoundError(
@@ -62,7 +68,10 @@ module.exports = class ReservationRepository {
 
   async getByStatus(...statuses) {
     const reservationInstances = await this.reservationModel.findAll({
-      include: [CarModel, UserModel],
+      include: [
+        {model: CarModel, paranoid: false},
+        {model: UserModel, paranoid: false},
+      ],
       where: {
         status: {
           [Op.or]: statuses

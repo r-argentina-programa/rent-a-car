@@ -88,9 +88,12 @@ describe('CarController methods', () => {
       params: {},
     };
 
-    await expect(mockController.view(reqMockWithoutCarId, resMock)).rejects.toThrowError(
-      CarIdNotDefinedError
-    );
+    const nextMock = jest.fn();
+
+    await mockController.view(reqMockWithoutCarId, resMock, nextMock);
+
+    expect(nextMock).toHaveBeenCalledTimes(1);
+
   });
 
   test('edit renders a form to edit a car', async () => {

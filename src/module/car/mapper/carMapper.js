@@ -13,8 +13,9 @@ exports.fromModelToEntity = ({
   transmission,
   price,
   img,
-  createdAt,
-  updatedAt,
+  createdAt = null,
+  updatedAt = null,
+  deletedAt = null,
   Reservations = []
 }) =>
   new Car(
@@ -31,6 +32,7 @@ exports.fromModelToEntity = ({
     img,
     createdAt,
     updatedAt,
+    deletedAt,
     Reservations.map(reservationModelToEntityMapper)
   );
 

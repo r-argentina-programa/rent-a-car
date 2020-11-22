@@ -10,20 +10,21 @@ const CarNotFoundError = require('../../error/CarNotFoundError');
 const { statuses } = require('../../../reservation/entity/ReservationStatus');
 
 describe('CarRepository methods', () => {
-  const sequelize = new Sequelize('sqlite::memory');
-  const CarModel = carModel.setup(sequelize);
-  const ReservationModel = reservationModel.setup(sequelize);
-  CarModel.hasMany(ReservationModel, { foreignKey: 'carId' });
-  ReservationModel.belongsTo(CarModel, { foreignKey: 'carId' });
-  const mockRepository = new CarRepository(CarModel);
-
-  beforeEach(async () => {
+  let sequelize, CarModel, ReservationModel, carRepository;
+  beforeEach(async (done) => {
+    sequelize = new Sequelize('sqlite::memory');
+    CarModel = carModel.setup(sequelize);
+    ReservationModel = reservationModel.setup(sequelize);
+    CarModel.hasMany(ReservationModel, { foreignKey: 'carId' });
+    ReservationModel.belongsTo(CarModel, { foreignKey: 'carId' });
+    carRepository = new CarRepository(CarModel);
     await sequelize.sync({ force: true });
+    done();
   });
 
   test('saves a new car in DB', async () => {
     const carWithoutId = createTestCar();
-    const { id, brand, model } = await mockRepository.save(carWithoutId);
+    const { id, brand, model } = await carRepository.save(carWithoutId);
     expect(id).toEqual(1);
     expect(brand).toEqual('Ford');
     expect(model).toEqual('Fiesta');
@@ -35,12 +36,12 @@ describe('CarRepository methods', () => {
     carWithId.brand = 'Chevrolet';
     carWithId.model = 'Onix';
 
-    const newCar = await mockRepository.save(carWithoutId);
-    const newCarTwo = await mockRepository.save(carWithoutId);
+    const newCar = await carRepository.save(carWithoutId);
+    const newCarTwo = await carRepository.save(carWithoutId);
     expect(newCar.id).toEqual(1);
     expect(newCarTwo.id).toEqual(2);
 
-    const updatedCar = await mockRepository.save(carWithId);
+    const updatedCar = await carRepository.save(carWithId);
     expect(updatedCar.id).toEqual(1);
     expect(updatedCar.brand).toEqual('Chevrolet');
     expect(updatedCar.model).toEqual('Onix');
@@ -52,14 +53,14 @@ describe('CarRepository methods', () => {
       brand: 'Ford',
       model: 'Fiesta',
     };
-    await expect(mockRepository.save(car)).rejects.toThrowError(CarNotDefinedError);
+    await expect(carRepository.save(car)).rejects.toThrowError(CarNotDefinedError);
   });
 
   test('getAll returns every car stored in DB', async () => {
-    const carWithoutId = createTestCar();
-    await mockRepository.save(carWithoutId);
-    await mockRepository.save(carWithoutId);
-    const cars = await mockRepository.getAll();
+    const carWithoutId = createTestCar(undefined, false);
+    await carRepository.save(carWithoutId);
+    await carRepository.save(carWithoutId);
+    const cars = await carRepository.getAll();
 
     expect(cars).toHaveLength(2);
     expect(cars[0].id).toEqual(1);
@@ -67,21 +68,21 @@ describe('CarRepository methods', () => {
   });
 
   test('getCarsLength returns number of cars stored in DB', async () => {
-    const carWithoutId = createTestCar();
-    await mockRepository.save(carWithoutId);
-    await mockRepository.save(carWithoutId);
-    await mockRepository.save(carWithoutId);
-    const carsLength = await mockRepository.getCarsLength();
+    const carWithoutId = createTestCar(undefined, false);
+    await carRepository.save(carWithoutId);
+    await carRepository.save(carWithoutId);
+    await carRepository.save(carWithoutId);
+    const carsLength = await carRepository.getCarsLength();
 
     expect(carsLength).toEqual(3);
   });
 
   test('getLastCar returns last car stored in DB', async () => {
-    const carWithoutId = createTestCar();
-    await mockRepository.save(carWithoutId);
-    await mockRepository.save(carWithoutId);
-    const carThree = await mockRepository.save(carWithoutId);
-    const lastCar = await mockRepository.getLastCar();
+    const carWithoutId = createTestCar(undefined, false);
+    await carRepository.save(carWithoutId);
+    await carRepository.save(carWithoutId);
+    const carThree = await carRepository.save(carWithoutId);
+    const lastCar = await carRepository.getLastCar();
 
     expect(lastCar).toEqual(carThree);
   });
@@ -90,39 +91,39 @@ describe('CarRepository methods', () => {
     const carWithoutId = createTestCar();
     const reservationWithoutId = createTestReservation();
     reservationWithoutId.status = statuses.PENDING.value;
-    await mockRepository.save(carWithoutId);
+    await carRepository.save(carWithoutId);
 
-    const carInstance = await mockRepository.carModel.findByPk(1);
+    const carInstance = await carRepository.carModel.findByPk(1);
     await carInstance.createReservation(reservationWithoutId);
     await carInstance.createReservation(reservationWithoutId);
 
-    const car = await mockRepository.getById(1);
+    const car = await carRepository.getById(1);
     expect(car.id).toEqual(1);
     expect(car.reservations).toHaveLength(2);
   });
 
   test('getById throws an error on undefined carId as argument', async () => {
-    await expect(mockRepository.getById()).rejects.toThrowError(CarIdNotDefinedError);
+    await expect(carRepository.getById()).rejects.toThrowError(CarIdNotDefinedError);
   });
 
   test('getById throws an error because there is no car stored in DB with this ID', async () => {
     const carId = 2;
 
-    await expect(mockRepository.getById(carId)).rejects.toThrowError(CarNotFoundError);
-    await expect(mockRepository.getById(carId)).rejects.toThrowError(
-      `There is no existing car with ID ${carId}`
+    await expect(carRepository.getById(carId)).rejects.toThrowError(CarNotFoundError);
+    await expect(carRepository.getById(carId)).rejects.toThrowError(
+      `No existe el auto con ID ${carId} (quizás haya sido eliminado)`
     );
   });
 
   test('deletes an existing car in DB and returns true', async () => {
     const carWithoutId = createTestCar();
-    await mockRepository.save(carWithoutId);
-    await mockRepository.save(carWithoutId);
-    await mockRepository.save(carWithoutId);
+    await carRepository.save(carWithoutId);
+    await carRepository.save(carWithoutId);
+    await carRepository.save(carWithoutId);
 
-    const car = await mockRepository.getById(2);
-    const deletedCar = await mockRepository.delete(car);
-    const remainingCars = await mockRepository.getAll();
+    const car = await carRepository.getById(2);
+    const deletedCar = await carRepository.delete(car);
+    const remainingCars = await carRepository.getAll();
 
     expect(deletedCar).toEqual(true);
     expect(remainingCars[0].id).toEqual(1);
@@ -131,11 +132,11 @@ describe('CarRepository methods', () => {
 
   test('tries to delete non-existent car in DB and returns false', async () => {
     const carWithoutId = createTestCar();
-    await mockRepository.save(carWithoutId);
-    await mockRepository.save(carWithoutId);
+    await carRepository.save(carWithoutId);
+    await carRepository.save(carWithoutId);
 
     const carNumberThree = createTestCar(3);
-    const deletedCar = await mockRepository.delete(carNumberThree);
+    const deletedCar = await carRepository.delete(carNumberThree);
 
     expect(deletedCar).toEqual(false);
   });
@@ -146,6 +147,6 @@ describe('CarRepository methods', () => {
       brand: 'Ford',
       model: 'Fiesta',
     };
-    await expect(mockRepository.delete(car)).rejects.toThrowError(CarNotDefinedError);
+    await expect(carRepository.delete(car)).rejects.toThrowError(CarNotDefinedError);
   });
 });

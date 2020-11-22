@@ -55,7 +55,7 @@ module.exports = class CarRepository {
 
     const carInstance = await this.carModel.findByPk(carId, { include: ReservationModel });
     if (!carInstance) {
-      throw new CarNotFoundError(`There is no existing car with ID ${carId}`);
+      throw new CarNotFoundError(`No existe el auto con ID ${carId} (quizás haya sido eliminado)`);
     }
 
     return fromModelToEntity(carInstance);

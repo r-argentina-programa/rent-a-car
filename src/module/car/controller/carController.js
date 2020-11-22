@@ -63,18 +63,22 @@ module.exports = class CarController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  async view(req, res) {
-    const { carId } = req.params;
-    if (!Number(carId)) {
-      throw new CarIdNotDefinedError();
-    }
+  async view(req, res, next) {
+    try {
+      const { carId } = req.params;
+      if (!Number(carId)) {
+        throw new CarIdNotDefinedError();
+      }
 
-    const car = await this.carService.getById(carId);
-    res.render(`${this.CAR_VIEWS}/view.njk`, {
-      title: `Viewing ${car.brand} ${car.model} ${car.year}`,
-      car,
-      reservations: car.reservations,
-    });
+      const car = await this.carService.getById(carId);
+      res.render(`${this.CAR_VIEWS}/view.njk`, {
+        title: `Viewing ${car.brand} ${car.model} ${car.year}`,
+        car,
+        reservations: car.reservations,
+      });
+    } catch (e) {
+      next(e)
+    }
   }
 
   /**

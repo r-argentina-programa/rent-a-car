@@ -15,7 +15,7 @@ function fillModal(evt) {
   const car = evt.target.closest('.car-data');
   const { id, brand, model, year } = car.dataset;
 
-  $modalContent.textContent = `Are you sure you want to delete ${brand} ${model} ${year} with ID ${id} ?`;
+  $modalContent.textContent = `Está seguro de eliminar el auto ${brand} ${model} ${year} con ID ${id}?`;
   $modalForm.action = `/car/delete/${id}`;
 }
 

@@ -15,6 +15,7 @@ module.exports = function createTestCar(id, includeReservations = true) {
     '/img/no-image-available.jpg',
     undefined,
     undefined,
+    undefined,
     includeReservations ? Array.from({ length: 3 }, (reservationId) => {
       return {
         id: reservationId,

@@ -35,8 +35,8 @@ app.use(function (err, req, res, next) {
   res.status(500);
   res.render(`default/views/error.njk`, {
     title: 'Error',
-    error: err
+    error: err,
   });
-})
+});
 
 app.listen(port, () => console.log(`Server listening at http://localhost:${port}`));

@@ -24,6 +24,7 @@
   "homepage": "https://github.com/mpaternostro/rent-a-car#readme",
   "devDependencies": {
     "@nestjs/cli": "^7.5.5",
+    "@nestjs/testing": "^7.6.12",
     "@types/jest": "^26.0.10",
     "@typescript-eslint/eslint-plugin": "^4.15.1",
     "@typescript-eslint/parser": "^4.15.1",
@@ -37,6 +38,7 @@
     "jest": "^26.4.2",
     "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
+    "ts-jest": "^26.5.1",
     "typescript": "^4.1.5"
   },
   "dependencies": {
@@ -53,5 +55,22 @@
     "rxjs": "^6.6.3",
     "sequelize": "^6.3.5",
     "sqlite3": "^5.0.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src/api",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
   }
 }

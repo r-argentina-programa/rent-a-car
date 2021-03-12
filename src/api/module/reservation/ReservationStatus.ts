@@ -1,7 +1,7 @@
 export class ReservationStatus {
-  private name: string;
+  public name: string;
 
-  private value: number;
+  public value: number;
 
   constructor(name: string, value: number) {
     this.name = name;

@@ -26,7 +26,8 @@
     "import/extensions": "off",
     "no-shadow": "warn",
     "class-methods-use-this": "off",
-    "no-useless-constructor": "off"
+    "no-useless-constructor": "off",
+    "import/no-cycle": "off"
   },
   "root": true,
   "env": {

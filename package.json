@@ -4,12 +4,9 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "start:api": "nest start",
-    "start": "node src/app.js",
-    "schema:migrate": "npx sequelize-cli db:migrate",
-    "dev": "nodemon --inspect --watch ./src/ -e 'js,njk,html' --verbose ./src/app.js",
-    "dev:api": "nest start --watch",
-    "dev:legacy": "nodemon --inspect --watch ./src/ -L -e 'js,njk,html' --verbose ./src/app.js",
+    "start": "nest start",
+    "schema:migrate": "ts-node .\\node_modules\\typeorm\\cli.js migration:run",
+    "dev": "nest start --watch",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },
@@ -39,6 +36,7 @@
     "jest": "^26.4.2",
     "prettier": "^2.0.5",
     "ts-jest": "^26.5.1",
+    "ts-node": "^9.1.1",
     "typescript": "^4.1.5"
   },
   "dependencies": {

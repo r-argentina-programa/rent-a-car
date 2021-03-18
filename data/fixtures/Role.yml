@@ -1,0 +1,6 @@
+entity: Role
+items:
+  role0:
+    name: 'admin'
+  role1:
+    name: 'operador'

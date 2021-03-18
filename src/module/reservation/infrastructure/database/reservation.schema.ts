@@ -1,7 +1,7 @@
 import { Reservation } from '../../domain/reservation.entity';
 import { BaseSchema } from '../../../../common/infrastructure/database/base.schema';
 import { Car } from '../../../car/car.entity';
-import { User } from '../../../user/user.entity';
+import { Client } from '../../../client/client.entity';
 
 export const ReservationSchema = new BaseSchema<Reservation>({
   name: 'Reservation',
@@ -15,10 +15,6 @@ export const ReservationSchema = new BaseSchema<Reservation>({
     finishDate: {
       type: 'date',
       name: 'finish_date',
-    },
-    carId: {
-      type: 'integer',
-      name: 'car_id',
     },
     pricePerDay: {
       type: 'integer',
@@ -46,12 +42,12 @@ export const ReservationSchema = new BaseSchema<Reservation>({
         name: 'car_id',
       },
     },
-    user: {
+    client: {
       type: 'many-to-one',
-      target: () => User,
-      inverseSide: 'users',
+      target: () => Client,
+      inverseSide: 'reservations',
       joinColumn: {
-        name: 'user_id',
+        name: 'client_id',
       },
     },
   },

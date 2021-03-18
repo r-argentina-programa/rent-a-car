@@ -15,11 +15,13 @@ export class BaseSchema<T = BaseEntity> extends EntitySchema<T> {
         ...options.columns,
         createdAt: {
           name: 'created_at',
-          type: 'date',
+          type: 'datetime',
+          createDate: true,
         },
         updatedAt: {
           name: 'updated_at',
-          type: 'date',
+          type: 'datetime',
+          createDate: true,
         },
       },
     });

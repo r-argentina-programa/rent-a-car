@@ -1,11 +1,11 @@
-import { User } from './user.entity';
+import { Client } from './client.entity';
 import { BaseSchema } from '../../common/infrastructure/database/base.schema';
 import { Reservation } from '../reservation/domain/reservation.entity';
 
-export const UserSchema = new BaseSchema<User>({
-  name: 'User',
-  target: User,
-  tableName: 'users',
+export const ClientSchema = new BaseSchema<Client>({
+  name: 'Client',
+  target: Client,
+  tableName: 'clients',
   columns: {
     address: {
       type: String,
@@ -44,9 +44,9 @@ export const UserSchema = new BaseSchema<User>({
     reservations: {
       type: 'one-to-many',
       target: () => Reservation,
-      inverseSide: 'user',
+      inverseSide: 'client',
       joinColumn: {
-        name: 'user_id',
+        name: 'client_id',
       },
     },
   },

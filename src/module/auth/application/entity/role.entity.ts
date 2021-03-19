@@ -1,5 +1,5 @@
 import { BaseEntity } from '../../../../common/infrastructure/base.entity';
-import { Permission } from './permission.entity';
+import { Permission } from './policy.entity';
 
 export class Role extends BaseEntity {
   public name: string;
@@ -10,7 +10,7 @@ export class Role extends BaseEntity {
     return {
       ...super.toJSON(),
       name: this.name,
-      permissions: [this.permissions.map((permission) => permission.toJSON())],
+      permissions: this.permissions.map((permission) => permission.toJSON()),
     };
   }
 }

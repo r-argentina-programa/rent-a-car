@@ -2,7 +2,9 @@ entity: Permission
 items:
   permission0:
     role: '@role0'
-    permission: 'manage'
+    action: 'manage'
+    subject: 'User'
   permission1:
     role: '@role1'
-    permission: 'retrieve'
+    action: 'retrieve'
+    subject: 'User'

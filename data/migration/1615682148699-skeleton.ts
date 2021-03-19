@@ -342,7 +342,11 @@ async function createPermissionsTable(queryRunner: QueryRunner) {
           type: 'int',
         },
         {
-          name: 'permission',
+          name: 'action',
+          type: 'varchar',
+        },
+        {
+          name: 'subject',
           type: 'varchar',
         },
         {
@@ -372,8 +376,8 @@ async function createPermissionsTable(queryRunner: QueryRunner) {
   await queryRunner.createUniqueConstraint(
     'permissions',
     new TableUnique({
-      columnNames: ['role_id', 'permission'],
-      name: 'permissions_unique_role_id_and_permission',
+      columnNames: ['role_id', 'action', 'subject'],
+      name: 'permissions_unique_role_id_and_action_and_subject',
     })
   );
 }

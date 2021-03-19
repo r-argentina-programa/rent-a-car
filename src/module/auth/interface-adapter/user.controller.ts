@@ -2,7 +2,9 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { UserService } from '../application/user.service';
 import { BaseController } from '../../../common/application/base.controller';
 import { SecureUserDto } from './dto/secure-user.dto';
-import { Public } from '../application/decorator/auth.decorator.public';
+import { RequirePolicies } from '../application/decorator/auth.decorator.require-policies';
+import { AuthAction } from '../application/entity/auth.action';
+import { Policy } from '../application/entity/policy';
 
 @Controller('users')
 export class UserController extends BaseController {
@@ -11,6 +13,7 @@ export class UserController extends BaseController {
   }
 
   @Get(':id')
+  @RequirePolicies([new Policy(AuthAction.Retrieve, 'User')])
   async get(@Param() params) {
     const user = await this.service.findOne(Number(params.id));
     return new SecureUserDto(user);

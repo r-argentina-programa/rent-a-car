@@ -1,15 +1,19 @@
 import { BaseSchema } from '../../../../common/infrastructure/database/base.schema';
 import { Role } from '../../application/entity/role.entity';
-import { Permission } from '../../application/entity/permission.entity';
+import { Permission } from '../../application/entity/policy.entity';
 
 export const PermissionSchema = new BaseSchema<Permission>({
   name: 'Permission',
   target: Permission,
   tableName: 'permissions',
   columns: {
-    permission: {
+    action: {
       type: String,
-      name: 'permission',
+      name: 'action',
+    },
+    subject: {
+      type: String,
+      name: 'subject',
     },
   },
   relations: {

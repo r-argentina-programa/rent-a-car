@@ -19,10 +19,13 @@ import { AuthController } from './interface-adapter/auth.controller';
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: jwtConstants.expirationTime },
+      verifyOptions: {
+        ignoreExpiration: process.env.NODE_ENV !== 'production',
+      },
     }),
   ],
   controllers: [UserController, AuthController],
   providers: [AuthService, AuthStrategyLocal, AuthStrategyJwt, CaslAbilityFactory, UserService],
-  exports: [AuthService],
+  exports: [AuthService, CaslAbilityFactory],
 })
 export class AuthModule {}

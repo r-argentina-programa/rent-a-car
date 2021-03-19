@@ -6,3 +6,9 @@ items:
     __call:
       setPassword:
         - admin
+  user1:
+    username: 'operador'
+    role: '@role1'
+    __call:
+      setPassword:
+        - operador

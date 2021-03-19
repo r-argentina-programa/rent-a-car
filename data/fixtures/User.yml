@@ -3,4 +3,6 @@ items:
   user0:
     username: 'admin'
     role: '@role0'
-    password: 'admin'
+    __call:
+      setPassword:
+        - admin

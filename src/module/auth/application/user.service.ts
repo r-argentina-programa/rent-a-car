@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './domain/user.entity';
-import { UserRepository } from './infrastructure/database/user.repository';
+import { User } from './entity/user.entity';
+import { UserRepository } from '../infrastructure/database/user.repository';
 
 @Injectable()
 export class UserService {
@@ -11,7 +11,9 @@ export class UserService {
   ) {}
 
   findOne(id: number): Promise<User> {
-    return this.repository.findOneOrFail(id);
+    return this.repository.findOneOrFail(id, {
+      relations: ['role', 'role.permissions'],
+    });
   }
 
   findOneByUsername(username: string): Promise<User> {
@@ -19,6 +21,7 @@ export class UserService {
       where: {
         username,
       },
+      relations: ['role', 'role.permissions'],
     });
   }
 

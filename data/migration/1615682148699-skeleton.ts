@@ -318,9 +318,9 @@ async function createReservationsTable(queryRunner: QueryRunner) {
   await queryRunner.createForeignKey(
     'reservations',
     new TableForeignKey({
-      columnNames: ['user_id'],
+      columnNames: ['client_id'],
       referencedColumnNames: ['id'],
-      referencedTableName: 'users',
+      referencedTableName: 'clients',
     })
   );
 }
@@ -332,7 +332,8 @@ async function createPermissionsTable(queryRunner: QueryRunner) {
       columns: [
         {
           name: 'id',
-          type: 'int',
+          type: 'integer',
+          isGenerated: true,
           isPrimary: true,
           generationStrategy: 'increment',
         },
@@ -341,8 +342,8 @@ async function createPermissionsTable(queryRunner: QueryRunner) {
           type: 'int',
         },
         {
-          name: 'permission_id',
-          type: 'int',
+          name: 'permission',
+          type: 'varchar',
         },
         {
           name: 'created_at',
@@ -371,8 +372,8 @@ async function createPermissionsTable(queryRunner: QueryRunner) {
   await queryRunner.createUniqueConstraint(
     'permissions',
     new TableUnique({
-      columnNames: ['role_id', 'permission_id'],
-      name: 'permissions_unique_role_id_and_permission_id',
+      columnNames: ['role_id', 'permission'],
+      name: 'permissions_unique_role_id_and_permission',
     })
   );
 }

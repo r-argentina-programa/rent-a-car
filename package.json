@@ -8,7 +8,7 @@
     "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync --config ormconfig.migrations.ts",
     "migration:run": "ts-node .\\\\node_modules\\\\typeorm\\\\cli.js migration:run --config ormconfig.migrations.ts",
     "migration:revert": "ts-node .\\\\node_modules\\\\typeorm\\\\cli.js migration:revert --config ormconfig.migrations.ts",
-    "fixtures:run": "fixtures ./data/fixtures --config ormconfig.migrations.ts --debug --sync --require=tsconfig-paths/register --require=ts-node/register",
+    "fixtures:run": "fixtures ./data/fixtures --config ormconfig.migrations.ts --debug --require=tsconfig-paths/register --require=ts-node/register",
     "dev": "nest start --watch",
     "test:watch": "jest --watch",
     "test": "jest --coverage",

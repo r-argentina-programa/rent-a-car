@@ -1,7 +1,7 @@
 export enum AuthAction {
-  Manage = 1,
-  Create,
-  Retrieve,
-  Update,
-  Delete,
+  Manage = 'manage',
+  Create = 'create',
+  Retrieve = 'retrieve',
+  Update = 'update',
+  Delete = 'delete',
 }

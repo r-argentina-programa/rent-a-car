@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeormConfig } from '@config/ormconfig';
-import { DefaultController } from './default/default.controller';
+import { APP_GUARD } from '@nestjs/core';
 import { CarModule } from './car/car.module';
 import { ReservationModule } from './reservation/reservation.module';
-import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { AuthController } from './auth/interface-adapter/auth.controller';
+import { JwtAuthGuard } from './auth/application/guard/jwt.auth.guard';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(typeormConfig),
-    CarModule,
-    UserModule,
-    ReservationModule,
-    AuthModule,
+  imports: [TypeOrmModule.forRoot(typeormConfig), AuthModule, CarModule, ReservationModule],
+  controllers: [AuthController],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
-  controllers: [DefaultController],
-  providers: [],
 })
 export class AppModule {}

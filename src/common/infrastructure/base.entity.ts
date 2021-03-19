@@ -7,4 +7,12 @@ export abstract class BaseEntity {
   public createdAt: Date;
 
   public updatedAt: Date;
+
+  toJSON() {
+    return {
+      id: this.id,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
+  }
 }

@@ -12,3 +12,27 @@
 // once they log in, load user + role + permissions and configure them w/casl
 // then you'll know if the user has a needed permission and then you can decide whether they can do it or not
 // decision happens in guards?
+
+import { Ability, AbilityBuilder } from '@casl/ability';
+import { Injectable } from '@nestjs/common';
+import { User } from '../../application/entity/user.entity';
+import { AuthAction } from '../../application/auth.action';
+import { Car } from '../../../car/car.entity';
+
+@Injectable()
+export class CaslAbilityFactory {
+  createForUser(user: User): Ability {
+    const { can, cannot, rules } = new AbilityBuilder(Ability);
+
+    if (user.role.permissions) {
+      can(AuthAction.Manage, 'all'); // read-write access to everything
+    } else {
+      can(AuthAction.Retrieve, 'all'); // read-only access to everything
+    }
+
+    can(AuthAction.Update, Car);
+    cannot(AuthAction.Delete, Car);
+
+    return new Ability(rules);
+  }
+}

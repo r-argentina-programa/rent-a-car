@@ -2,7 +2,7 @@ entity: Permission
 items:
   permission0:
     role: '@role0'
-    permission: 1 # manage
-  permission{3..5}:
+    permission: 'manage'
+  permission1:
     role: '@role1'
-    permission: '($current)'
+    permission: 'retrieve'

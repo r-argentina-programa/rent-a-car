@@ -1,6 +1,6 @@
-import { User } from '../../domain/user.entity';
+import { User } from '../../application/entity/user.entity';
 import { BaseSchema } from '../../../../common/infrastructure/database/base.schema';
-import { Role } from '../../../auth/application/role.entity';
+import { Role } from '../../application/entity/role.entity';
 
 export const UserSchema = new BaseSchema<User>({
   name: 'User',

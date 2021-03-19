@@ -4,7 +4,7 @@ import { LocalAuthGuard } from '../application/guard/local.auth.guard';
 import { AuthService } from '../application/auth.service';
 import { LoginRequestDto } from './dto/login.request.dto';
 import { LoginResponseDto } from './dto/login.response.dto';
-import { SecureUser } from './dto/secure-user.dto';
+import { SecureUserDto } from './dto/secure-user.dto';
 import { Public } from '../application/decorator/auth.decorator.public';
 
 @Controller('auth')
@@ -17,7 +17,7 @@ export class AuthController extends BaseController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Body() user: LoginRequestDto, @Req() req): LoginResponseDto {
-    const secureUser = new SecureUser(req.user);
+    const secureUser = new SecureUserDto(req.user);
     return new LoginResponseDto(this.authService.getAccessToken(secureUser));
   }
 }

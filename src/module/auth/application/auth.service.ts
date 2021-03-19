@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from './user.service';
 import { comparePasswords } from './helper/encryption.helper';
 import { User } from './entity/user.entity';
-import { SecureUser } from '../interface-adapter/dto/secure-user.dto';
+import { SecureUserDto } from '../interface-adapter/dto/secure-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +17,7 @@ export class AuthService {
     return null;
   }
 
-  getAccessToken(user: SecureUser): string {
+  getAccessToken(user: SecureUserDto): string {
     return this.jwtService.sign(user.toJSON());
   }
 }

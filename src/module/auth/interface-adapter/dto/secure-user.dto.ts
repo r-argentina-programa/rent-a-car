@@ -1,7 +1,7 @@
 import { User } from '../../application/entity/user.entity';
 import { Role } from '../../application/entity/role.entity';
 
-export class SecureUser {
+export class SecureUserDto {
   public id: number;
 
   public username: string;

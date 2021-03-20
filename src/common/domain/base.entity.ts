@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn } from 'typeorm';
+import { Entity } from 'typeorm';
 
 @Entity()
 export abstract class BaseEntity {

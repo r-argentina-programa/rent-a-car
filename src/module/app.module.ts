@@ -7,7 +7,7 @@ import { ReservationModule } from './reservation/reservation.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthController } from './auth/interface-adapter/auth.controller';
 import { PolicyAuthGuard } from './auth/infrastructure/guard/policy.auth.guard';
-import { logger } from '../common/application/logger.middleware';
+import { logger } from '../common/infrastructure/logger.middleware';
 
 @Module({
   imports: [TypeOrmModule.forRoot(typeormConfig), AuthModule, CarModule, ReservationModule],

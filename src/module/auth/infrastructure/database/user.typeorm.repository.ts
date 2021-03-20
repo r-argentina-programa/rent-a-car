@@ -9,10 +9,6 @@ export class UserTypeormRepository extends AbstractRepository<User> implements I
     return this.repository.find();
   }
 
-  findOneOrFail(id: string): Promise<User>;
-
-  findOneOrFail(id: number): Promise<User>;
-
   findOneOrFail(id: string | number): Promise<User> {
     return this.repository.findOneOrFail(id, {
       relations: ['role', 'role.permissions'],

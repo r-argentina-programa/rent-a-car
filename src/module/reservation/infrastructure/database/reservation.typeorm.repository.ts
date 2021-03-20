@@ -10,10 +10,6 @@ export class ReservationTypeormRepository extends AbstractRepository<Reservation
     return this.repository.find({ relations: ['car'] });
   }
 
-  findOneOrFail(id: string): Promise<Reservation>;
-
-  findOneOrFail(id: number): Promise<Reservation>;
-
   findOneOrFail(id: string | number): Promise<Reservation> {
     return this.repository.findOneOrFail(id, { relations: ['car', 'user'] });
   }

@@ -1,6 +1,6 @@
 import { BaseSchema } from '../../../../common/infrastructure/database/base.schema';
 import { Role } from '../../application/entity/role.entity';
-import { Permission } from '../../application/entity/policy.entity';
+import { Permission } from '../../application/entity/permission.entity';
 
 export const PermissionSchema = new BaseSchema<Permission>({
   name: 'Permission',

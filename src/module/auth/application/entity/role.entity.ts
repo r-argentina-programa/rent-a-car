@@ -1,5 +1,5 @@
 import { BaseEntity } from '../../../../common/infrastructure/base.entity';
-import { Permission } from './policy.entity';
+import { Permission } from './permission.entity';
 
 export class Role extends BaseEntity {
   public name: string;

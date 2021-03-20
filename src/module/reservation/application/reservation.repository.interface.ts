@@ -1,7 +1,4 @@
 import { Reservation } from '../domain/reservation.entity';
+import { IBaseRepository } from '../../../common/application/base.repository.interface';
 
-export interface IReservationRepository {
-  findOneOrFail(id: string | number): Promise<Reservation>;
-
-  find(): Promise<Reservation[]>;
-}
+export type IReservationRepository = IBaseRepository<Reservation>;

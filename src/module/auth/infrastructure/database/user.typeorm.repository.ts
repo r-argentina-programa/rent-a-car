@@ -23,4 +23,16 @@ export class UserTypeormRepository extends AbstractRepository<User> implements I
       relations: ['role', 'role.permissions'],
     });
   }
+
+  delete(entity: User): Promise<boolean> {
+    return Promise.resolve(true);
+  }
+
+  softDelete(entity: User): Promise<User> {
+    return Promise.resolve(new User());
+  }
+
+  save(entity: User): Promise<User> {
+    return Promise.resolve(new User());
+  }
 }

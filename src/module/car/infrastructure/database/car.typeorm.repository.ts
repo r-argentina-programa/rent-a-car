@@ -12,4 +12,16 @@ export class CarTypeormRepository extends AbstractRepository<Car> implements ICa
   find(): Promise<Car[]> {
     return this.repository.find();
   }
+
+  delete(entity: Car): Promise<boolean> {
+    return Promise.resolve(false);
+  }
+
+  save(entity: Car): Promise<Car> {
+    return Promise.resolve(undefined);
+  }
+
+  softDelete(entity: Car): Promise<Car> {
+    return Promise.resolve(undefined);
+  }
 }

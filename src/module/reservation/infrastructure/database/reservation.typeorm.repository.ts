@@ -13,4 +13,16 @@ export class ReservationTypeormRepository extends AbstractRepository<Reservation
   findOneOrFail(id: string | number): Promise<Reservation> {
     return this.repository.findOneOrFail(id, { relations: ['car', 'user'] });
   }
+
+  delete(entity: Reservation): Promise<boolean> {
+    return Promise.resolve(false);
+  }
+
+  save(entity: Reservation): Promise<Reservation> {
+    return Promise.resolve(undefined);
+  }
+
+  softDelete(entity: Reservation): Promise<Reservation> {
+    return Promise.resolve(undefined);
+  }
 }

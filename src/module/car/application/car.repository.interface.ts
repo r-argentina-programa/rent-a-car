@@ -1,7 +1,4 @@
 import { Car } from '../domain/car.entity';
+import { IBaseRepository } from '../../../common/application/base.repository.interface';
 
-export interface ICarRepository {
-  find(): Promise<Car[]>;
-
-  findOneOrFail(id: number | string): Promise<Car>;
-}
+export type ICarRepository = IBaseRepository<Car>;

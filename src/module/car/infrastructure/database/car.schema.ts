@@ -1,6 +1,6 @@
-import { Car } from './car.entity';
-import { BaseSchema } from '../../common/infrastructure/database/base.schema';
-import { Reservation } from '../reservation/domain/reservation.entity';
+import { Car } from '../../domain/car.entity';
+import { BaseSchema } from '../../../../common/infrastructure/database/base.schema';
+import { Reservation } from '../../../reservation/domain/reservation.entity';
 
 export const CarSchema = new BaseSchema<Car>({
   name: 'Car',

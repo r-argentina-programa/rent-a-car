@@ -4,7 +4,7 @@ import { ConnectionOptions } from 'typeorm';
 import { UserSchema } from '../module/auth/infrastructure/database/user.schema';
 import { RoleSchema } from '../module/auth/infrastructure/database/role.schema';
 import { ReservationSchema } from '../module/reservation/infrastructure/database/reservation.schema';
-import { CarSchema } from '../module/car/car.schema';
+import { CarSchema } from '../module/car/infrastructure/database/car.schema';
 import { ClientSchema } from '../module/client/client.schema';
 import { BaseSchema } from '../common/infrastructure/database/base.schema';
 import { PermissionSchema } from '../module/auth/infrastructure/database/permission.schema';

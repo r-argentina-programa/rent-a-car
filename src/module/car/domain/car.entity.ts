@@ -1,5 +1,5 @@
-import { BaseEntity } from '../../common/domain/base.entity';
-import { Reservation } from '../reservation/domain/reservation.entity';
+import { BaseEntity } from '../../../common/domain/base.entity';
+import { Reservation } from '../../reservation/domain/reservation.entity';
 
 export class Car extends BaseEntity {
   public ac: boolean;

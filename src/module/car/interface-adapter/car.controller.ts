@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { Car } from './car.entity';
-import { CarService } from './car.service';
-import { BaseController } from '../../common/application/base.controller';
+import { Car } from '../domain/car.entity';
+import { CarService } from '../application/car.service';
+import { BaseController } from '../../../common/application/base.controller';
 
 @Controller('cars')
 export class CarController extends BaseController {

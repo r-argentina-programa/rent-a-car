@@ -1,7 +1,7 @@
 import { Expose } from 'class-transformer';
 import { ReservationStatus } from './reservation.status';
 import { BaseEntity } from '../../../common/domain/base.entity';
-import { Car } from '../../car/car.entity';
+import { Car } from '../../car/domain/car.entity';
 import { ReservationStatuses } from './reservation.statuses';
 import { Client } from '../../client/client.entity';
 

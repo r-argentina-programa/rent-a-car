@@ -1,11 +1,11 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { BaseController } from '../../../common/application/base.controller';
-import { LocalAuthGuard } from '../application/guard/local.auth.guard';
-import { AuthService } from '../application/auth.service';
+import { LocalAuthGuard } from '../infrastructure/guard/local.auth.guard';
+import { AuthService } from '../application/service/auth.service';
 import { LoginRequestDto } from './dto/login.request.dto';
 import { LoginResponseDto } from './dto/login.response.dto';
-import { SecureUserDto } from './dto/secure-user.dto';
-import { Public } from '../application/decorator/auth.decorator.public';
+import { Public } from './decorator/auth.decorator.public';
+import { SecureUser } from '../application/entity/secure-user.entity';
 
 @Controller('auth')
 export class AuthController extends BaseController {
@@ -17,7 +17,7 @@ export class AuthController extends BaseController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Body() user: LoginRequestDto, @Req() req): LoginResponseDto {
-    const secureUser = new SecureUserDto(req.user);
+    const secureUser = new SecureUser(req.user);
     return new LoginResponseDto(this.authService.getAccessToken(secureUser));
   }
 }

@@ -1,24 +1,10 @@
-import { User } from '../../application/entity/user.entity';
-import { Role } from '../../application/entity/role.entity';
+import { SecureUser } from '../../application/entity/secure-user.entity';
 
 export class SecureUserDto {
-  public id: number;
-
-  public username: string;
-
-  public role: Role;
-
-  readonly #user: User;
-
-  constructor(user: User) {
-    this.#user = user;
-    this.id = this.#user.id;
-    this.username = this.#user.username;
-    this.role = this.#user.role;
-  }
+  constructor(private user: SecureUser) {}
 
   toJSON() {
-    const { id, username, ...user } = this.#user;
+    const { id, username, ...user } = this.user;
     return {
       id,
       username,

@@ -1,12 +1,13 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { POLICIES_KEY } from '../decorator/auth.decorator.require-policies';
-import { CaslAbilityFactory } from '../../infrastructure/casl/casl.ability.factorty';
-import { Policy } from '../entity/policy';
+import { POLICIES_KEY } from '../../interface-adapter/decorator/auth.decorator.require-policies';
+import { CaslAbilityFactory } from '../casl/casl.ability.factorty';
+import { Policy } from '../../application/entity/policy';
 import { JwtAuthGuard } from './jwt.auth.guard';
-import { User } from '../entity/user.entity';
+import { User } from '../../application/entity/user.entity';
 
-// Tarea: Crear un AnyPolicyAuthGuard y un EveryPolicyAuthGuard
+// Tarea: Modificar este PolicyAuthGuard (y cualquier otro archivo necesario)
+// para que permita verificar que TODOS los policies estén presentes (actualmente chequea que alguno exista)
 @Injectable()
 export class PolicyAuthGuard extends JwtAuthGuard {
   constructor(reflector: Reflector, private caslAbilityFactory: CaslAbilityFactory) {
@@ -15,7 +16,7 @@ export class PolicyAuthGuard extends JwtAuthGuard {
 
   async canActivate(context: ExecutionContext) {
     // revisar
-    const requiredActions: Policy[] = this.reflector.getAllAndOverride<Policy[]>(POLICIES_KEY, [
+    const requiredPolicies: Policy[] = this.reflector.getAllAndOverride<Policy[]>(POLICIES_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
@@ -28,7 +29,7 @@ export class PolicyAuthGuard extends JwtAuthGuard {
       return false;
     }
 
-    if (!requiredActions) {
+    if (!requiredPolicies) {
       return true;
     }
 
@@ -40,7 +41,7 @@ export class PolicyAuthGuard extends JwtAuthGuard {
 
     const userAbility = this.caslAbilityFactory.createForUser(user);
 
-    return requiredActions.every((requiredAction: Policy) => {
+    return requiredPolicies.every((requiredAction: Policy) => {
       const hasAbility = userAbility.can(requiredAction.action, requiredAction.subject);
 
       console.log(

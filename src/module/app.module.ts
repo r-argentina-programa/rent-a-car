@@ -6,7 +6,7 @@ import { CarModule } from './car/car.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthController } from './auth/interface-adapter/auth.controller';
-import { PolicyAuthGuard } from './auth/application/guard/policy.auth.guard';
+import { PolicyAuthGuard } from './auth/infrastructure/guard/policy.auth.guard';
 import { logger } from '../common/application/logger.middleware';
 
 @Module({

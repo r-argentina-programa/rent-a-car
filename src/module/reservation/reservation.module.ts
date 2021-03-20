@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { ReservationTypeormRepository } from './infrastructure/database/reservation.typeorm.repository';
 import { ReserveCarHttpController } from './interface-adapter/use-cases/reserve-car/reserve-car.http.controller';
@@ -9,7 +8,7 @@ import { GetReservationHttpController } from './interface-adapter/use-cases/get-
 import { GetReservationsHttpController } from './interface-adapter/use-cases/get-reservations/get-reservations.http.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ReservationTypeormRepository])],
+  imports: [],
   controllers: [
     GetStatusesHttpController,
     GetReservationHttpController,

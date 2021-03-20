@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeormConfig } from '@config/ormconfig';
 import { APP_GUARD } from '@nestjs/core';
@@ -7,6 +7,7 @@ import { ReservationModule } from './reservation/reservation.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthController } from './auth/interface-adapter/auth.controller';
 import { PolicyAuthGuard } from './auth/application/guard/policy.auth.guard';
+import { logger } from '../common/application/logger.middleware';
 
 @Module({
   imports: [TypeOrmModule.forRoot(typeormConfig), AuthModule, CarModule, ReservationModule],
@@ -18,4 +19,8 @@ import { PolicyAuthGuard } from './auth/application/guard/policy.auth.guard';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): any {
+    consumer.apply(logger).forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

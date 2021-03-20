@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from './user.service';
 import { comparePasswords } from './helper/encryption.helper';
-import { User } from './entity/user.entity';
 import { SecureUserDto } from '../interface-adapter/dto/secure-user.dto';
 
 @Injectable()

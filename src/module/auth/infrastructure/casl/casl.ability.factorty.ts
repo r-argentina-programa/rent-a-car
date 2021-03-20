@@ -8,7 +8,9 @@ export class CaslAbilityFactory {
     const { can, rules } = new AbilityBuilder(Ability);
     const { permissions } = user.role;
 
+    // eslint-disable-next-line no-console
     console.log(`Definiendo permisos para usuario ${user.username} (${user.id})`);
+    // eslint-disable-next-line no-console
     console.table(permissions);
 
     permissions.forEach((permission) => {

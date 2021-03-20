@@ -6,6 +6,7 @@ import { ReservationService } from './application/reservation.service';
 import { GetStatusesHttpController } from './interface-adapter/use-cases/get-statuses/get-statuses.http.controller';
 import { GetReservationHttpController } from './interface-adapter/use-cases/get-reservation/get-reservation.http.controller';
 import { GetReservationsHttpController } from './interface-adapter/use-cases/get-reservations/get-reservations.http.controller';
+import { IReservationRepository } from './application/reservation.repository.interface';
 
 @Module({
   imports: [],
@@ -16,12 +17,16 @@ import { GetReservationsHttpController } from './interface-adapter/use-cases/get
     ReserveCarHttpController,
   ],
   providers: [
-    ReservationService,
     {
       provide: 'IReservationRepository',
       useFactory: (connection: Connection) =>
         connection.getCustomRepository(ReservationTypeormRepository),
       inject: [Connection],
+    },
+    {
+      provide: ReservationService,
+      useFactory: (repository: IReservationRepository) => new ReservationService(repository),
+      inject: ['IReservationRepository'],
     },
   ],
 })

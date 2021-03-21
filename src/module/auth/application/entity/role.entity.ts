@@ -6,11 +6,11 @@ export class Role extends BaseEntity {
 
   public permissions: Permission[];
 
-  toJSON() {
+  toJSON(): Role {
     return {
       ...super.toJSON(),
       name: this.name,
       permissions: this.permissions.map((permission) => permission.toJSON()),
-    };
+    } as Role;
   }
 }

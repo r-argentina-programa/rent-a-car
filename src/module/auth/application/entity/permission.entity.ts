@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from '../../../../common/infrastructure/base.entity';
 import { Role } from './role.entity';
 import { AuthAction } from './auth.action';
@@ -9,11 +10,11 @@ export class Permission extends BaseEntity {
 
   public subject: string;
 
-  toJSON() {
+  toJSON(): Permission {
     return {
       ...super.toJSON(),
       action: this.action,
       subject: this.subject,
-    };
+    } as Permission;
   }
 }

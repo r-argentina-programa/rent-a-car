@@ -1,4 +1,5 @@
 import { Controller, Get, Param, Req } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
 import { UserService } from '../application/service/user.service';
 import { BaseController } from '../../../common/application/base.controller';
 import { SecureUserDto } from './dto/secure-user.dto';
@@ -23,7 +24,7 @@ export class UserController extends BaseController {
 
   @Get('self')
   @RequirePolicies([new Policy(AuthAction.Retrieve, 'User')])
-  async getSelf(@Req() req) {
+  async getSelf(@Req() req): Promise<SecureUserDto> {
     const loggedInUser: User = req.user;
     const user = await this.service.findOne(Number(loggedInUser.id));
     return new SecureUserDto(new SecureUser(user));
@@ -31,7 +32,7 @@ export class UserController extends BaseController {
 
   @Get(':id')
   @RequirePolicies([new Policy(AuthAction.Manage, 'User')])
-  async get(@Param() params) {
+  async get(@Param() params): Promise<SecureUserDto> {
     const user = await this.service.findOne(Number(params.id));
     return new SecureUserDto(new SecureUser(user));
   }

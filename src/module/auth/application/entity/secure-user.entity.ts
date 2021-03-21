@@ -8,21 +8,18 @@ export class SecureUser {
 
   public role: Role;
 
-  readonly #user: User;
-
   constructor(user: User) {
-    this.#user = user;
-    this.id = this.#user.id;
-    this.username = this.#user.username;
-    this.role = this.#user.role;
+    this.id = user.id;
+    this.username = user.username;
+    this.role = user.role;
   }
 
   toJSON() {
-    const { id, username, ...user } = this.#user;
+    const { id, username } = this;
     return {
       id,
       username,
-      role: user.role.toJSON(),
+      role: this.role.toJSON(),
     };
   }
 }

@@ -10,8 +10,9 @@ export const UserSchema = new BaseSchema<User>({
     username: {
       type: String,
     },
-    password: {
+    externalId: {
       type: String,
+      name: 'external_id',
     },
   },
   relations: {

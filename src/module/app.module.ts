@@ -5,13 +5,12 @@ import { APP_GUARD } from '@nestjs/core';
 import { CarModule } from './car/car.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { AuthModule } from './auth/auth.module';
-import { AuthController } from './auth/interface-adapter/auth.controller';
 import { PolicyAuthGuard } from './auth/infrastructure/guard/policy.auth.guard';
 import { logger } from '../common/infrastructure/logger.middleware';
 
 @Module({
   imports: [TypeOrmModule.forRoot(typeormConfig), AuthModule, CarModule, ReservationModule],
-  controllers: [AuthController],
+  controllers: [],
   providers: [
     {
       provide: APP_GUARD,

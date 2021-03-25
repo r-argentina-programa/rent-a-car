@@ -1,14 +1,14 @@
-import { SecureUser } from '../../application/entity/secure-user.entity';
 import { Role } from '../../application/entity/role.entity';
+import { User } from '../../application/entity/user.entity';
 
-export class SecureUserDto {
+export class UserDto {
   public id: number;
 
   public username: string;
 
   public role: Role;
 
-  constructor(private user: SecureUser) {
+  constructor(private user: User) {
     this.id = this.user.id;
     this.username = this.user.username;
     this.role = this.user.role;

@@ -27,7 +27,13 @@
     "no-shadow": "warn",
     "class-methods-use-this": "off",
     "no-useless-constructor": "off",
-    "import/no-cycle": "off"
+    "import/no-cycle": "off",
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ]
   },
   "root": true,
   "env": {

@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from '../../../../common/infrastructure/base.entity';
 import { Role } from './role.entity';
 import { AuthAction } from './auth.action';

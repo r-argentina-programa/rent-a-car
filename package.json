@@ -10,6 +10,7 @@
     "migration:revert": "ts-node .\\\\node_modules\\\\typeorm\\\\cli.js migration:revert --config ormconfig.migrations.ts",
     "fixtures:run": "fixtures ./data/fixtures --config ormconfig.migrations.ts --debug --require=tsconfig-paths/register --require=ts-node/register",
     "dev": "nest start --watch",
+    "client": "http-server --port 80 ./public",
     "test:watch": "jest --watch",
     "test": "jest --coverage",
     "start": "nest start"

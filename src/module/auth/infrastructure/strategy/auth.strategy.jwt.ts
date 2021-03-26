@@ -27,6 +27,7 @@ export class AuthStrategyJwt extends PassportStrategy(Strategy) {
   async validate(auth0UserDto: Auth0UserDto): Promise<User> {
     const user = await this.userService.findOneByExternalId(auth0UserDto.sub);
 
+    console.log(user);
     if (user) {
       return populatePermissions(user, auth0UserDto);
     }

@@ -38,6 +38,6 @@ export class UserTypeormRepository extends AbstractRepository<User> implements I
   }
 
   save(entity: User): Promise<User> {
-    return Promise.resolve(new User());
+    return this.repository.save(entity);
   }
 }

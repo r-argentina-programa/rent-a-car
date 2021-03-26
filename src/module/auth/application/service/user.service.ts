@@ -21,6 +21,6 @@ export class UserService {
   }
 
   create(user: User): Promise<User> {
-    return Promise.resolve(new User());
+    return this.repository.save(user);
   }
 }

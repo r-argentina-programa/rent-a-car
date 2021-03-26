@@ -4,4 +4,5 @@ export enum AuthAction {
   Retrieve = 'retrieve',
   Update = 'update',
   Delete = 'delete',
+  ReadSelf = 'readSelf',
 }

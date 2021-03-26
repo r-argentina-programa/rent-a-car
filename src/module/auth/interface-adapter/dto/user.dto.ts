@@ -6,20 +6,23 @@ export class UserDto {
 
   public username: string;
 
+  public externalId: string;
+
   public role: Role;
 
-  constructor(private user: User) {
-    this.id = this.user.id;
-    this.username = this.user.username;
-    this.role = this.user.role;
+  constructor(user: User) {
+    this.id = user.id;
+    this.username = user.username;
+    this.role = user.role;
   }
 
   toJSON() {
-    const { id, username, ...user } = this.user;
+    const { id, externalId, username } = this;
     return {
       id,
+      externalId,
       username,
-      role: user.role.toJSON(),
+      role: this.role.toJSON(),
     };
   }
 }

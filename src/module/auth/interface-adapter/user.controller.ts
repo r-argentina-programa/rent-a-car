@@ -14,22 +14,21 @@ export class UserController extends BaseController {
   }
 
   @Get('/')
-  @RequirePolicies([new Policy(AuthAction.Manage, 'User')])
+  @RequirePolicies([new Policy(AuthAction.Retrieve, 'User')])
   async getAll(): Promise<UserDto[]> {
     const users = await this.service.findAll();
     return users.map((user) => new UserDto(user));
   }
 
   @Get('self')
-  @RequirePolicies([new Policy(AuthAction.Retrieve, 'User')])
+  @RequirePolicies([new Policy(AuthAction.ReadSelf, 'User')])
   async getSelf(@Req() req): Promise<UserDto> {
     const loggedInUser: User = req.user;
-    const user = await this.service.findOne(Number(loggedInUser.id));
-    return new UserDto(user);
+    return new UserDto(loggedInUser);
   }
 
   @Get(':id')
-  @RequirePolicies([new Policy(AuthAction.Manage, 'User')])
+  @RequirePolicies([new Policy(AuthAction.Retrieve, 'User')])
   async get(@Param() params): Promise<UserDto> {
     const user = await this.service.findOne(Number(params.id));
     return new UserDto(user);

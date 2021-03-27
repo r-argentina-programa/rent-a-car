@@ -1,7 +1,15 @@
 # Rent a Car
 
-## Versión básica de NestJS
+## Versión de NestJS + Auth0
 
-Este branch contiene un setup básico de NestJS dentro de la carpeta `/api`
+Esta versión del Rent a Car demuestra cómo utilizar Auth0 como proveedor de identidad.
 
-Se corre con `npm run dev:api`
+## Cómo probar la aplicación
+
+Crear una copia de .env.dist a .env
+
+Para correct el servidor es necesario ejecutar las migraciones de la base de datos corriendo `npm run migration:run`
+
+Una vez que las migraciones estén listas, podemos correr `npm run dev` para ejecutar el servidor
+Para ejecutar el cliente el comando es `npm run client`
+

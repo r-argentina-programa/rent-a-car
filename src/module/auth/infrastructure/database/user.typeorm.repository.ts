@@ -10,9 +10,7 @@ export class UserTypeormRepository extends AbstractRepository<User> implements I
   }
 
   findOneOrFail(id: string | number): Promise<User> {
-    return this.repository.findOneOrFail(id, {
-      relations: ['role', 'role.permissions'],
-    });
+    return this.repository.findOneOrFail(id);
   }
 
   findOneByUsername(username: string): Promise<User> {
@@ -20,7 +18,14 @@ export class UserTypeormRepository extends AbstractRepository<User> implements I
       where: {
         username,
       },
-      relations: ['role', 'role.permissions'],
+    });
+  }
+
+  findOneByExternalId(externalId: string): Promise<User> {
+    return this.repository.findOne({
+      where: {
+        externalId,
+      },
     });
   }
 
@@ -33,6 +38,6 @@ export class UserTypeormRepository extends AbstractRepository<User> implements I
   }
 
   save(entity: User): Promise<User> {
-    return Promise.resolve(new User());
+    return this.repository.save(entity);
   }
 }

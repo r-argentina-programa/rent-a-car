@@ -12,7 +12,15 @@ export class UserService {
     return this.repository.findOneByUsername(username);
   }
 
+  findOneByExternalId(externalId: string): Promise<User> {
+    return this.repository.findOneByExternalId(externalId);
+  }
+
   findAll(): Promise<User[]> {
     return this.repository.find();
+  }
+
+  create(user: User): Promise<User> {
+    return this.repository.save(user);
   }
 }

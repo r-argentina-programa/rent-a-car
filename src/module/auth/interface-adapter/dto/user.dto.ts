@@ -1,10 +1,12 @@
-import { Role } from './role.entity';
-import { User } from './user.entity';
+import { Role } from '../../application/entity/role.entity';
+import { User } from '../../application/entity/user.entity';
 
-export class SecureUser {
+export class UserDto {
   public id: number;
 
   public username: string;
+
+  public externalId: string;
 
   public role: Role;
 
@@ -15,9 +17,10 @@ export class SecureUser {
   }
 
   toJSON() {
-    const { id, username } = this;
+    const { id, externalId, username } = this;
     return {
       id,
+      externalId,
       username,
       role: this.role.toJSON(),
     };

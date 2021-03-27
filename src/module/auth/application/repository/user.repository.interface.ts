@@ -3,4 +3,6 @@ import { IBaseRepository } from '../../../../common/application/base.repository.
 
 export interface IUserRepository extends IBaseRepository<User> {
   findOneByUsername(username: string): Promise<User>;
+
+  findOneByExternalId(externalId: string): Promise<User>;
 }

@@ -1,9 +1,17 @@
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './module/app.module';
 
 async function bootstrap(port: number) {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors();
+  app.useGlobalPipes(
+    new ValidationPipe({
+      disableErrorMessages: true,
+    })
+  );
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Rent a Car')

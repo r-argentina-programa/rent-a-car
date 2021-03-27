@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Ejemplo login rent-a-car</title>
+  <link rel="stylesheet" href="main.css" />
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.13/auth0-spa-js.production.js"></script>
+  <script src="main.js"></script>
+</head>
+<body>
+<h1>Rent a Car</h1>
+<p>Bienvenido a rent a car</p>
+<button id="btn-login" disabled="true" onclick="login()">Log in</button>
+<button id="btn-logout" disabled="true" onclick="logout()">Log out</button>
+
+
+<div class="hidden" id="gated-content">
+  <p>
+    Bienvenido!<strong>Estás logueado</strong>.
+  </p>
+  <label>
+    Access token:
+    <pre id="ipt-access-token"></pre>
+  </label>
+  <label>
+    Datos de perfil de usuario:
+    <pre id="ipt-user-profile"></pre>
+  </label>
+
+  <button id="btn-get-profile" onclick="getProfile()">Obtener perfil del servidor</button>
+  <pre id="profile-data"></pre>
+</div>
+</body>
+</html>

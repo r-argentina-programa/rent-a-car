@@ -1,4 +1,11 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey, TableUnique } from 'typeorm';
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey,
+  TableIndex,
+  TableUnique,
+} from 'typeorm';
 
 async function createUsersTable(queryRunner: QueryRunner) {
   await queryRunner.createTable(
@@ -13,15 +20,11 @@ async function createUsersTable(queryRunner: QueryRunner) {
           generationStrategy: 'increment',
         },
         {
-          name: 'role_id',
-          type: 'integer',
-        },
-        {
           name: 'username',
           type: 'varchar',
         },
         {
-          name: 'password',
+          name: 'external_id',
           type: 'varchar',
         },
         {
@@ -44,12 +47,18 @@ async function createUsersTable(queryRunner: QueryRunner) {
     true
   );
 
-  await queryRunner.createForeignKey(
+  await queryRunner.createIndex(
     'users',
-    new TableForeignKey({
-      columnNames: ['role_id'],
-      referencedColumnNames: ['id'],
-      referencedTableName: 'roles',
+    new TableIndex({
+      columnNames: ['external_id'],
+    })
+  );
+
+  await queryRunner.createUniqueConstraint(
+    'users',
+    new TableUnique({
+      name: 'users_unique_external_id',
+      columnNames: ['external_id'],
     })
   );
 
@@ -58,46 +67,6 @@ async function createUsersTable(queryRunner: QueryRunner) {
     new TableUnique({
       name: 'users_unique_username',
       columnNames: ['username'],
-    })
-  );
-}
-
-async function createRolesTable(queryRunner: QueryRunner) {
-  await queryRunner.createTable(
-    new Table({
-      name: 'roles',
-      columns: [
-        {
-          name: 'id',
-          type: 'integer',
-          isPrimary: true,
-          isGenerated: true,
-          generationStrategy: 'increment',
-        },
-        {
-          name: 'name',
-          type: 'varchar',
-        },
-        {
-          name: 'created_at',
-          type: 'dateTime',
-          default: 'CURRENT_TIMESTAMP',
-        },
-        {
-          name: 'updated_at',
-          type: 'dateTime',
-          default: 'CURRENT_TIMESTAMP',
-        },
-      ],
-    }),
-    true
-  );
-
-  await queryRunner.createUniqueConstraint(
-    'roles',
-    new TableUnique({
-      name: 'roles_unique_name',
-      columnNames: ['name'],
     })
   );
 }
@@ -325,76 +294,15 @@ async function createReservationsTable(queryRunner: QueryRunner) {
   );
 }
 
-async function createPermissionsTable(queryRunner: QueryRunner) {
-  await queryRunner.createTable(
-    new Table({
-      name: 'permissions',
-      columns: [
-        {
-          name: 'id',
-          type: 'integer',
-          isGenerated: true,
-          isPrimary: true,
-          generationStrategy: 'increment',
-        },
-        {
-          name: 'role_id',
-          type: 'int',
-        },
-        {
-          name: 'action',
-          type: 'varchar',
-        },
-        {
-          name: 'subject',
-          type: 'varchar',
-        },
-        {
-          name: 'created_at',
-          type: 'dateTime',
-          default: 'CURRENT_TIMESTAMP',
-        },
-        {
-          name: 'updated_at',
-          type: 'dateTime',
-          default: 'CURRENT_TIMESTAMP',
-        },
-      ],
-    }),
-    true
-  );
-
-  await queryRunner.createForeignKey(
-    'permissions',
-    new TableForeignKey({
-      columnNames: ['role_id'],
-      referencedColumnNames: ['id'],
-      referencedTableName: 'roles',
-    })
-  );
-
-  await queryRunner.createUniqueConstraint(
-    'permissions',
-    new TableUnique({
-      columnNames: ['role_id', 'action', 'subject'],
-      name: 'permissions_unique_role_id_and_action_and_subject',
-    })
-  );
-}
-
 export class skeleton1615682148699 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await createRolesTable(queryRunner);
     await createUsersTable(queryRunner);
-    await createPermissionsTable(queryRunner);
     await createClientsTable(queryRunner);
     await createCarsTable(queryRunner);
     await createReservationsTable(queryRunner);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('permissions');
-    await queryRunner.dropTable('roles');
     await queryRunner.dropTable('users');
     await queryRunner.dropTable('reservations');
     await queryRunner.dropTable('clients');

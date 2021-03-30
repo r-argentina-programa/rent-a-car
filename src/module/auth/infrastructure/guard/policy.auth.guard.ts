@@ -25,7 +25,7 @@ export class PolicyAuthGuard extends JwtAuthGuard {
       await super.canActivate(context);
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.log(e);
+      console.log('JWT Token no válido: ', e);
       return false;
     }
 
@@ -44,6 +44,7 @@ export class PolicyAuthGuard extends JwtAuthGuard {
     return requiredPolicies.every((requiredAction: Policy) => {
       const hasAbility = userAbility.can(requiredAction.action, requiredAction.subject);
 
+      // eslint-disable-next-line no-console
       console.log(
         `User ${user.username} ${hasAbility ? 'can' : 'cannot'} ${requiredAction.action} ${
           requiredAction.subject

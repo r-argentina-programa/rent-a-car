@@ -18,10 +18,13 @@ export class CarTypeormRepository extends AbstractRepository<Car> implements ICa
   }
 
   save(entity: Car): Promise<Car> {
-    return Promise.resolve(undefined);
+    return this.repository.save(entity);
   }
 
-  softDelete(entity: Car): Promise<Car> {
-    return Promise.resolve(undefined);
+  async softDelete(entity: Car): Promise<Car> {
+    await this.repository.softDelete(entity.id);
+    return this.repository.findOneOrFail(entity.id, {
+      withDeleted: true,
+    });
   }
 }

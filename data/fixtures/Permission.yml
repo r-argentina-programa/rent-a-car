@@ -5,6 +5,10 @@ items:
     action: 'manage'
     subject: 'User'
   permission1:
+    role: '@role0'
+    action: 'manage'
+    subject: 'Car'
+  permission2:
     role: '@role1'
     action: 'retrieve'
     subject: 'User'

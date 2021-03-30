@@ -37,6 +37,11 @@ export const CarSchema = new BaseSchema<Car>({
     year: {
       type: Number,
     },
+    deletedAt: {
+      name: 'deleted_at',
+      type: 'datetime',
+      deleteDate: true,
+    },
   },
   relations: {
     reservations: {

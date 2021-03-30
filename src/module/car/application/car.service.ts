@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { Car } from '../domain/car.entity';
 import { ICarRepository } from './car.repository.interface';
 
@@ -11,5 +10,13 @@ export class CarService {
 
   findAll(): Promise<Car[]> {
     return this.repository.find();
+  }
+
+  save(car: Car): Promise<Car> {
+    return this.repository.save(car);
+  }
+
+  async deleteById(id: number): Promise<Car> {
+    return this.repository.softDelete(await this.repository.findOneOrFail(id));
   }
 }

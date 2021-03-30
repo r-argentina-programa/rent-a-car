@@ -1,5 +1,6 @@
 import { BaseEntity } from '../../../common/domain/base.entity';
 import { Reservation } from '../../reservation/domain/reservation.entity';
+import { TransmissionType } from './car.transmission-type';
 
 export class Car extends BaseEntity {
   public ac: boolean;
@@ -18,11 +19,13 @@ export class Car extends BaseEntity {
 
   public price: number;
 
-  public transmission: string;
+  public transmission: TransmissionType;
 
   public year: number;
 
   public reservations: Reservation[];
+
+  public deletedAt: Date;
 
   get name(): string {
     return `${this.brand} ${this.model}`;

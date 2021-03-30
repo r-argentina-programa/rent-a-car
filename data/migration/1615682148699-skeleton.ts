@@ -109,7 +109,7 @@ async function createClientsTable(queryRunner: QueryRunner) {
       columns: [
         {
           name: 'id',
-          type: 'int',
+          type: 'integer',
           isPrimary: true,
           generationStrategy: 'increment',
         },
@@ -162,7 +162,8 @@ async function createClientsTable(queryRunner: QueryRunner) {
         {
           name: 'deleted_at',
           type: 'dateTime',
-          default: 'CURRENT_TIMESTAMP',
+          default: null,
+          isNullable: true,
         },
       ],
     }),
@@ -177,7 +178,7 @@ async function createCarsTable(queryRunner: QueryRunner) {
       columns: [
         {
           name: 'id',
-          type: 'int',
+          type: 'integer',
           isPrimary: true,
           generationStrategy: 'increment',
         },
@@ -235,7 +236,8 @@ async function createCarsTable(queryRunner: QueryRunner) {
         {
           name: 'deleted_at',
           type: 'dateTime',
-          default: 'CURRENT_TIMESTAMP',
+          default: null,
+          isNullable: true,
         },
       ],
     }),
@@ -250,17 +252,17 @@ async function createReservationsTable(queryRunner: QueryRunner) {
       columns: [
         {
           name: 'id',
-          type: 'int',
+          type: 'integer',
           isPrimary: true,
           generationStrategy: 'increment',
         },
         {
           name: 'car_id',
-          type: 'int',
+          type: 'integer',
         },
         {
           name: 'client_id',
-          type: 'int',
+          type: 'integer',
         },
         {
           name: 'start_date',
@@ -284,7 +286,7 @@ async function createReservationsTable(queryRunner: QueryRunner) {
         },
         {
           name: 'status',
-          type: 'int',
+          type: 'integer',
         },
         {
           name: 'created_at',
@@ -339,7 +341,7 @@ async function createPermissionsTable(queryRunner: QueryRunner) {
         },
         {
           name: 'role_id',
-          type: 'int',
+          type: 'integer',
         },
         {
           name: 'action',

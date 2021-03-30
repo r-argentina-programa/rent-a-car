@@ -8,7 +8,7 @@ export class BaseSchema<T = BaseEntity> extends EntitySchema<T> {
       ...options,
       columns: {
         id: {
-          type: Number,
+          type: 'integer',
           primary: true,
           generated: true,
         },

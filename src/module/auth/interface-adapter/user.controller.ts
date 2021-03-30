@@ -1,5 +1,4 @@
 import { Controller, Get, Param, Req } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
 import { UserService } from '../application/service/user.service';
 import { BaseController } from '../../../common/application/base.controller';
 import { SecureUserDto } from './dto/secure-user.dto';
